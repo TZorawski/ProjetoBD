@@ -12,9 +12,9 @@ import model.Pais;
  *
  * @author André Schwerz
  */
-public class AtividadeJDialog111 extends javax.swing.JDialog {
+public class AtividadeJDialog extends javax.swing.JDialog {
 
-    public AtividadeJDialog111(java.awt.Frame parent, boolean modal) {
+    public AtividadeJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         try {

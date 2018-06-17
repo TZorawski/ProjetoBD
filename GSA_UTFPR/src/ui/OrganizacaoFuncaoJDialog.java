@@ -12,9 +12,9 @@ import model.Pais;
  *
  * @author André Schwerz
  */
-public class CategoriaJDialog11 extends javax.swing.JDialog {
+public class OrganizacaoFuncaoJDialog extends javax.swing.JDialog {
 
-    public CategoriaJDialog11(java.awt.Frame parent, boolean modal) {
+    public OrganizacaoFuncaoJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         try {
@@ -38,16 +38,14 @@ public class CategoriaJDialog11 extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        txtNome = new javax.swing.JTextField();
-        txtNome1 = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        taObservacao = new javax.swing.JTextArea();
+        cbPessoa = new javax.swing.JComboBox<>();
+        cbFuncao = new javax.swing.JComboBox<>();
         btnFechar = new javax.swing.JButton();
-        btnNovo = new javax.swing.JButton();
-        btnSalvar = new javax.swing.JButton();
-        btnRemover = new javax.swing.JButton();
+        btnPesquisar = new javax.swing.JButton();
+        btnCadastrar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PAIS");
@@ -56,26 +54,19 @@ public class CategoriaJDialog11 extends javax.swing.JDialog {
 
         JTablePaises.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Sigla", "Nome", "Descrição"
+                "Pessoa", "Função"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -85,45 +76,28 @@ public class CategoriaJDialog11 extends javax.swing.JDialog {
         if (JTablePaises.getColumnModel().getColumnCount() > 0) {
             JTablePaises.getColumnModel().getColumn(0).setResizable(false);
             JTablePaises.getColumnModel().getColumn(1).setResizable(false);
-            JTablePaises.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 490, 140));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 490, 215));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), " REGISTRO DE PAIS ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Lucida Grande", 1, 13))); // NOI18N
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("Nome:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 70, 20));
+        jLabel1.setText("Função:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 70, 50, 20));
 
-        jLabel2.setText("Sigla:");
+        jLabel2.setText("Pessoa:");
         jLabel2.setAlignmentX(1.0F);
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 20, 70, 20));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 50, 20));
 
-        jLabel3.setText("Descrição:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+        cbPessoa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(cbPessoa, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 380, -1));
 
-        txtNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNomeActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 100, -1));
+        cbFuncao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel1.add(cbFuncao, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, 380, -1));
 
-        txtNome1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNome1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtNome1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, 240, -1));
-
-        taObservacao.setColumns(20);
-        taObservacao.setRows(5);
-        jScrollPane2.setViewportView(taObservacao);
-
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 450, 70));
-
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 490, 200));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 490, 140));
+        jPanel1.getAccessibleContext().setAccessibleName(" REGISTRO DE ORGANIZADOR/FUNÇÃO ");
 
         btnFechar.setText("Cancelar");
         btnFechar.setActionCommand("btnFechar");
@@ -133,39 +107,39 @@ public class CategoriaJDialog11 extends javax.swing.JDialog {
                 btnFecharActionPerformed(evt);
             }
         });
-        getContentPane().add(btnFechar, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 400, 100, 30));
+        getContentPane().add(btnFechar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 390, 90, 40));
 
-        btnNovo.setText("Pesquisar");
-        btnNovo.setActionCommand("btnNovo");
-        btnNovo.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+        btnPesquisar.setText("Pesquisar");
+        btnPesquisar.setActionCommand("btnNovo");
+        btnPesquisar.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNovoActionPerformed(evt);
+                btnPesquisarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnNovo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 100, 30));
+        getContentPane().add(btnPesquisar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 80, 40));
 
-        btnSalvar.setText("Cadastrar");
-        btnSalvar.setActionCommand("btnAlterar");
-        btnSalvar.setEnabled(false);
-        btnSalvar.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+        btnCadastrar.setText("Cadastrar");
+        btnCadastrar.setActionCommand("btnAlterar");
+        btnCadastrar.setEnabled(false);
+        btnCadastrar.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalvarActionPerformed(evt);
+                btnCadastrarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 400, 100, 30));
+        getContentPane().add(btnCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 390, 80, 40));
 
-        btnRemover.setText("Editar");
-        btnRemover.setActionCommand("btnRemover");
-        btnRemover.setEnabled(false);
-        btnRemover.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+        btnEditar.setText("Editar");
+        btnEditar.setActionCommand("btnRemover");
+        btnEditar.setEnabled(false);
+        btnEditar.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoverActionPerformed(evt);
+                btnEditarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRemover, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 400, 100, 30));
+        getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 80, 40));
 
         btnCancelar.setText("Remover");
         btnCancelar.setActionCommand("btnImprimir");
@@ -176,25 +150,28 @@ public class CategoriaJDialog11 extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 400, 100, 30));
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 390, 80, 40));
+
+        jButton1.setText("Salvar");
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, 80, 40));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnFecharActionPerformed
+
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
         addRecord = true;
         clearInputBoxes();
-        
-        txtSigla.setEnabled(true);
-        txtNome.setEnabled(true);
-        
-        enableButtons(false, true, true, false);
-        
-        txtSigla.requestFocus();
-    }//GEN-LAST:event_btnNovoActionPerformed
 
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        enableButtons(false, true, true, false);
+        enableFields(true);
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja salvar esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
 
         if (dialogResult == JOptionPane.YES_OPTION) {
@@ -205,76 +182,52 @@ public class CategoriaJDialog11 extends javax.swing.JDialog {
                     updateRecord();
                 }
                 addRecord = false;
-                
-                txtSigla.setEnabled(false);
-                txtNome.setEnabled(false);
-                
-                enableButtons(true, false, false, false);
-                
                 loadRecords();
+
+                enableButtons(true, false, false, false);
+                enableFields(false);
+            } catch (IOException | ClassNotFoundException | SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
+
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            try {
+                deleteRecord();
+                loadRecords();
+                clearInputBoxes();
+                enableButtons(true, false, false, false);
+                enableFields(false);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
         }
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
-    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-
-        if (!txtSigla.getText().isEmpty()) {
-            int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
-
-            if (dialogResult == JOptionPane.YES_OPTION) {
-                try {
-                    deleteRecord();
-                    loadRecords();
-                    clearInputBoxes();
-                    enableButtons(true, false, false, false);
-                    
-                    txtNome.setEnabled(false);
-                    
-                } catch (SQLException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
-        }
-    }//GEN-LAST:event_btnRemoverActionPerformed
-
-    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnFecharActionPerformed
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         clearInputBoxes();
         enableButtons(true, false, false, false);
-        addRecord = false;
-        txtSigla.setEnabled(false);
-        txtNome.setEnabled(false);
+        enableFields(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomeActionPerformed
-
-    private void txtNome1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNome1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNome1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable JTablePaises;
+    private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnFechar;
-    private javax.swing.JButton btnNovo;
-    private javax.swing.JButton btnRemover;
-    private javax.swing.JButton btnSalvar;
+    private javax.swing.JButton btnPesquisar;
+    private javax.swing.JComboBox<Object> cbFuncao;
+    private javax.swing.JComboBox<Object> cbPessoa;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea taObservacao;
-    private javax.swing.JTextField txtNome;
-    private javax.swing.JTextField txtNome1;
     // End of variables declaration//GEN-END:variables
 
     boolean addRecord = false;
