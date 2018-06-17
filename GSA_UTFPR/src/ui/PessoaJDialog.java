@@ -58,12 +58,12 @@ public class PessoaJDialog extends javax.swing.JDialog {
         cbCurso = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         taObservacao = new javax.swing.JTextArea();
-        btnCancelar = new javax.swing.JButton();
+        btnFechar = new javax.swing.JButton();
         btnPesquisar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        btnRemover = new javax.swing.JButton();
-        btnSalvar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pessoa");
@@ -173,15 +173,15 @@ public class PessoaJDialog extends javax.swing.JDialog {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 490, 250));
         jPanel1.getAccessibleContext().setAccessibleName(" REGISTRO DE PESSOAS");
 
-        btnCancelar.setText("Cancelar");
-        btnCancelar.setActionCommand("btnFechar");
-        btnCancelar.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btnFechar.setText("Cancelar");
+        btnFechar.setActionCommand("btnFechar");
+        btnFechar.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnFechar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
+                btnFecharActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, 90, 30));
+        getContentPane().add(btnFechar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, 90, 30));
 
         btnPesquisar.setText("Pesquisar");
         btnPesquisar.setActionCommand("btnNovo");
@@ -215,19 +215,19 @@ public class PessoaJDialog extends javax.swing.JDialog {
         });
         getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 460, 80, 30));
 
-        btnRemover.setText("Remover");
-        btnRemover.setActionCommand("btnImprimir");
-        btnRemover.setEnabled(false);
-        btnRemover.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelar.setText("Remover");
+        btnCancelar.setActionCommand("btnImprimir");
+        btnCancelar.setEnabled(false);
+        btnCancelar.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoverActionPerformed(evt);
+                btnCancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRemover, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 460, 80, 30));
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 460, 80, 30));
 
-        btnSalvar.setText("Salvar");
-        getContentPane().add(btnSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, 80, 30));
+        jButton1.setText("Salvar");
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, 80, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -277,15 +277,15 @@ public class PessoaJDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }//GEN-LAST:event_btnFecharActionPerformed
 
-    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         clearInputBoxes();
         enableButtons(true, false, false, false);
         enableFields(false);
-    }//GEN-LAST:event_btnRemoverActionPerformed
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
         // TODO add your handling code here:
@@ -304,10 +304,10 @@ public class PessoaJDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnPesquisar;
-    private javax.swing.JButton btnRemover;
-    private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cbCurso;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -425,7 +425,7 @@ public class PessoaJDialog extends javax.swing.JDialog {
     public void enableButtons(boolean novo, boolean salvar, boolean cancelar, boolean remover){
         btnPesquisar.setEnabled(novo);
         btnCadastrar.setEnabled(salvar);
-        btnRemover.setEnabled(cancelar);
+        btnCancelar.setEnabled(cancelar);
         btnEditar.setEnabled(remover);
     }
 
