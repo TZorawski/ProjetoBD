@@ -74,7 +74,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title=" REGISTRO DE PAIS ">
+            <TitledBorder title=" REGISTRO DE ORGANIZA&#xc7;&#xc3;O/FUN&#xc7;&#xc3;O ">
               <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder/>
               </Border>
