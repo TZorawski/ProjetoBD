@@ -239,51 +239,21 @@ public class AtividadeJDialog extends javax.swing.JDialog {
     }
 
     private void updateRecord() throws SQLException {
-        Pais p = new Pais();
-        p.setSigla(txtSigla.getText());
-        p.setNome(txtNome.getText());
-        PaisDAO dao = new PaisDAO();
-        dao.update(p);
+        //TO-DO
     }
 
     private void deleteRecord() throws SQLException {
-        PaisDAO dao = new PaisDAO();
-        dao.remove(txtSigla.getText());
+        //TO-DO
     }
 
     private void loadRecords() throws SQLException {
-        String sql = "SELECT Sigla, Nome FROM PAIS ORDER BY sigla";
-        ResultSetTableModel tableModel = new ResultSetTableModel(sql);
-        JTablePaises.setModel(tableModel);
-        
-        JTablePaises.getColumnModel().getColumn(0).setWidth(50);
-        JTablePaises.getColumnModel().getColumn(0).setMinWidth(50);
-        JTablePaises.getColumnModel().getColumn(0).setMaxWidth(50);
-        
-        JTablePaises.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
-            try {
-                if (JTablePaises.getSelectedRow() >= 0) {
-                    Object s = JTablePaises.getValueAt(JTablePaises.getSelectedRow(), 0);
-                    Object n = JTablePaises.getValueAt(JTablePaises.getSelectedRow(), 1);
-
-                    txtSigla.setText(s.toString());
-                    txtNome.setText(n.toString());
-                    txtNome.setEnabled(true);
-                    enableButtons(false, true, true, true);
-                }
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
-        });
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-        JTablePaises.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+        //TO-DO
     }
     
     public void enableButtons(boolean novo, boolean salvar, boolean cancelar, boolean remover){
-        btnNovo.setEnabled(novo);
-        btnSalvar.setEnabled(salvar);
-        btnCancelar.setEnabled(cancelar);
-        btnRemover.setEnabled(remover);
+//        btnNovo.setEnabled(novo);
+//        btnSalvar.setEnabled(salvar);
+//        btnCancelar.setEnabled(cancelar);
+//        btnRemover.setEnabled(remover);
     }
 }
