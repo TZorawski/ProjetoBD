@@ -226,16 +226,16 @@ public class AtividadeJDialog extends javax.swing.JDialog {
     boolean addRecord = false;
 
     private void clearInputBoxes() {
-        txtSigla.setText("");
-        txtNome.setText("");
+//        txtSigla.setText("");
+//        txtNome.setText("");
     }
 
     private void addNew() throws SQLException {
-        Pais p = new Pais();
-        p.setSigla(txtSigla.getText());
-        p.setNome(txtNome.getText());
-        PaisDAO dao = new PaisDAO();
-        dao.insert(p);
+//        Pais p = new Pais();
+//        p.setSigla(txtSigla.getText());
+//        p.setNome(txtNome.getText());
+//        PaisDAO dao = new PaisDAO();
+//        dao.insert(p);
     }
 
     private void updateRecord() throws SQLException {

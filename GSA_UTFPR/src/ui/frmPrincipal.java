@@ -1,5 +1,6 @@
 package ui;
 
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -107,6 +108,11 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnOrganizador.setText("ORGANIZADORES");
 
         btnCurso.setText("CURSOS");
+        btnCurso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCursoActionPerformed(evt);
+            }
+        });
 
         btnFuncao.setText("FUNÇÕES");
 
@@ -395,9 +401,9 @@ public class frmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInscricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInscricaoActionPerformed
-        PilotoJDialog form = new PilotoJDialog(null, true);
-        form.setLocationRelativeTo(null);
-        form.setVisible(true);
+        //PilotoJDialog form = new PilotoJDialog(null, true);
+//        form.setLocationRelativeTo(null);
+//        form.setVisible(true);
     }//GEN-LAST:event_btnInscricaoActionPerformed
 
     private void btnParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnParticipanteActionPerformed
@@ -405,15 +411,15 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnParticipanteActionPerformed
 
     private void btnMinistranteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinistranteActionPerformed
-        PaisJDialog form = new PaisJDialog(null, true);
-        form.setLocationRelativeTo(null);
-        form.setVisible(true);
+//        PaisJDialog form = new PaisJDialog(null, true);
+//        form.setLocationRelativeTo(null);
+//        form.setVisible(true);
     }//GEN-LAST:event_btnMinistranteActionPerformed
 
     private void btnAtividadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtividadeActionPerformed
-        EquipeJDialog form = new EquipeJDialog(null, true);
-        form.setLocationRelativeTo(null);
-        form.setVisible(true);
+//        EquipeJDialog form = new EquipeJDialog(null, true);
+//        form.setLocationRelativeTo(null);
+//        form.setVisible(true);
     }//GEN-LAST:event_btnAtividadeActionPerformed
 
     private void btnPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaActionPerformed
@@ -429,59 +435,65 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        clearInputBoxes();
-        enableButtons(true, false, false, false);
-        enableFields(false);
+//        clearInputBoxes();
+//        enableButtons(true, false, false, false);
+//        enableFields(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
-
-        if (dialogResult == JOptionPane.YES_OPTION) {
-            try {
-                deleteRecord();
-                loadRecords();
-                clearInputBoxes();
-                enableButtons(true, false, false, false);
-                enableFields(false);
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
+//        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
+//
+//        if (dialogResult == JOptionPane.YES_OPTION) {
+//            try {
+//                deleteRecord();
+//                loadRecords();
+//                clearInputBoxes();
+//                enableButtons(true, false, false, false);
+//                enableFields(false);
+//            } catch (SQLException ex) {
+//                System.out.println(ex.getMessage());
+//            }
+//        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja salvar esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
-
-        if (dialogResult == JOptionPane.YES_OPTION) {
-            try {
-                if (addRecord == true) {
-                    addNew();
-                } else {
-                    updateRecord();
-                }
-                addRecord = false;
-                loadRecords();
-
-                enableButtons(true, false, false, false);
-                enableFields(false);
-            } catch (IOException | ClassNotFoundException | SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
+//        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja salvar esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
+//
+//        if (dialogResult == JOptionPane.YES_OPTION) {
+//            try {
+//                if (addRecord == true) {
+//                    addNew();
+//                } else {
+//                    updateRecord();
+//                }
+//                addRecord = false;
+//                loadRecords();
+//
+//                enableButtons(true, false, false, false);
+//                enableFields(false);
+//            } catch (IOException | ClassNotFoundException | SQLException ex) {
+//                System.out.println(ex.getMessage());
+//            }
+//        }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        addRecord = true;
-        clearInputBoxes();
-
-        enableButtons(false, true, true, false);
-        enableFields(true);
+//        addRecord = true;
+//        clearInputBoxes();
+//
+//        enableButtons(false, true, true, false);
+//        enableFields(true);
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnFecharActionPerformed
+
+    private void btnCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCursoActionPerformed
+        CursoJDialog form = new CursoJDialog(null, true);
+        form.setLocationRelativeTo(null);
+        form.setVisible(true);
+    }//GEN-LAST:event_btnCursoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddCurso;

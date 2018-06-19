@@ -1,12 +1,15 @@
 package ui;
 
-import dao.PaisDAO;
+import dao.CursoDAO;
+import dao.CursoDAO;
+import java.io.IOException;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
-import model.Pais;
+import model.Curso;
+import model.Curso;
 
 /**
  *
@@ -34,7 +37,7 @@ public class CursoJDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        JTablePaises = new javax.swing.JTable();
+        JTableCursos = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         txtSigla = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -44,15 +47,15 @@ public class CursoJDialog extends javax.swing.JDialog {
         btnPesquisar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PAIS");
         setBounds(new java.awt.Rectangle(0, 15, 0, 0));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        JTablePaises.setModel(new javax.swing.table.DefaultTableModel(
+        JTableCursos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -79,10 +82,10 @@ public class CursoJDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(JTablePaises);
-        if (JTablePaises.getColumnModel().getColumnCount() > 0) {
-            JTablePaises.getColumnModel().getColumn(0).setResizable(false);
-            JTablePaises.getColumnModel().getColumn(1).setResizable(false);
+        jScrollPane1.setViewportView(JTableCursos);
+        if (JTableCursos.getColumnModel().getColumnCount() > 0) {
+            JTableCursos.getColumnModel().getColumn(0).setResizable(false);
+            JTableCursos.getColumnModel().getColumn(1).setResizable(false);
         }
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 490, 215));
@@ -160,31 +163,31 @@ public class CursoJDialog extends javax.swing.JDialog {
         });
         getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 80, 40));
 
-        btnCancelar.setText("Remover");
-        btnCancelar.setActionCommand("btnImprimir");
-        btnCancelar.setEnabled(false);
-        btnCancelar.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btnRemover.setText("Remover");
+        btnRemover.setActionCommand("btnImprimir");
+        btnRemover.setEnabled(false);
+        btnRemover.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
+                btnRemoverActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 390, 80, 40));
+        getContentPane().add(btnRemover, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 390, 80, 40));
 
-        jButton1.setText("Salvar");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, 80, 40));
+        btnSalvar.setText("Salvar");
+        getContentPane().add(btnSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, 80, 40));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtSiglaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSiglaKeyTyped
-        if (txtSigla.getText().length() >= 3 ) // limit textfield to 3 characters
+        if (txtSigla.getText().length() <= 5 ) // limit textfield to 3 characters
             evt.consume();     
     }//GEN-LAST:event_txtSiglaKeyTyped
 
     private void txtNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyTyped
-        if (txtNome.getText().length() >= 100 )
+        if (txtNome.getText().length() <= 100 )
             evt.consume();     
     }//GEN-LAST:event_txtNomeKeyTyped
 
@@ -193,11 +196,11 @@ public class CursoJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnFecharActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        addRecord = true;
-        clearInputBoxes();
-
-        enableButtons(false, true, true, false);
-        enableFields(true);
+//        addRecord = true;
+//        clearInputBoxes();
+//
+//        enableButtons(false, true, true, false);
+//        enableFields(true);
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
@@ -214,8 +217,8 @@ public class CursoJDialog extends javax.swing.JDialog {
                 loadRecords();
 
                 enableButtons(true, false, false, false);
-                enableFields(false);
-            } catch (IOException | ClassNotFoundException | SQLException ex) {
+                //enableFields(false);
+            } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
         }
@@ -230,27 +233,27 @@ public class CursoJDialog extends javax.swing.JDialog {
                 loadRecords();
                 clearInputBoxes();
                 enableButtons(true, false, false, false);
-                enableFields(false);
+                //enableFields(false);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
         clearInputBoxes();
         enableButtons(true, false, false, false);
-        enableFields(false);
-    }//GEN-LAST:event_btnCancelarActionPerformed
+        //enableFields(false);
+    }//GEN-LAST:event_btnRemoverActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable JTablePaises;
+    private javax.swing.JTable JTableCursos;
     private javax.swing.JButton btnCadastrar;
-    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnPesquisar;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnRemover;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -267,40 +270,40 @@ public class CursoJDialog extends javax.swing.JDialog {
     }
 
     private void addNew() throws SQLException {
-        Pais p = new Pais();
-        p.setSigla(txtSigla.getText());
-        p.setNome(txtNome.getText());
-        PaisDAO dao = new PaisDAO();
-        dao.insert(p);
+        Curso c = new Curso();
+        c.setSigla(txtSigla.getText());
+        c.setNome(txtNome.getText());
+        CursoDAO dao = new CursoDAO();
+        dao.insert(c);
     }
 
     private void updateRecord() throws SQLException {
-        Pais p = new Pais();
-        p.setSigla(txtSigla.getText());
-        p.setNome(txtNome.getText());
-        PaisDAO dao = new PaisDAO();
-        dao.update(p);
+        Curso c = new Curso();
+        c.setSigla(txtSigla.getText());
+        c.setNome(txtNome.getText());
+        CursoDAO dao = new CursoDAO();
+        dao.update(c);
     }
 
     private void deleteRecord() throws SQLException {
-        PaisDAO dao = new PaisDAO();
+        CursoDAO dao = new CursoDAO();
         dao.remove(txtSigla.getText());
     }
 
     private void loadRecords() throws SQLException {
-        String sql = "SELECT Sigla, Nome FROM PAIS ORDER BY sigla";
+        String sql = "SELECT Sigla, Nome FROM CURSO ORDER BY sigla";
         ResultSetTableModel tableModel = new ResultSetTableModel(sql);
-        JTablePaises.setModel(tableModel);
+        JTableCursos.setModel(tableModel);
         
-        JTablePaises.getColumnModel().getColumn(0).setWidth(50);
-        JTablePaises.getColumnModel().getColumn(0).setMinWidth(50);
-        JTablePaises.getColumnModel().getColumn(0).setMaxWidth(50);
+        JTableCursos.getColumnModel().getColumn(0).setWidth(50);
+        JTableCursos.getColumnModel().getColumn(0).setMinWidth(50);
+        JTableCursos.getColumnModel().getColumn(0).setMaxWidth(50);
         
-        JTablePaises.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
+        JTableCursos.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
             try {
-                if (JTablePaises.getSelectedRow() >= 0) {
-                    Object s = JTablePaises.getValueAt(JTablePaises.getSelectedRow(), 0);
-                    Object n = JTablePaises.getValueAt(JTablePaises.getSelectedRow(), 1);
+                if (JTableCursos.getSelectedRow() >= 0) {
+                    Object s = JTableCursos.getValueAt(JTableCursos.getSelectedRow(), 0);
+                    Object n = JTableCursos.getValueAt(JTableCursos.getSelectedRow(), 1);
 
                     txtSigla.setText(s.toString());
                     txtNome.setText(n.toString());
@@ -313,13 +316,13 @@ public class CursoJDialog extends javax.swing.JDialog {
         });
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-        JTablePaises.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+        JTableCursos.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
     }
     
     public void enableButtons(boolean novo, boolean salvar, boolean cancelar, boolean remover){
-        btnNovo.setEnabled(novo);
+        btnCadastrar.setEnabled(novo);
         btnSalvar.setEnabled(salvar);
-        btnCancelar.setEnabled(cancelar);
+        btnRemover.setEnabled(cancelar);
         btnRemover.setEnabled(remover);
     }
 }
