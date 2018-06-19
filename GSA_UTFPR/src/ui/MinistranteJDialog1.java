@@ -165,12 +165,12 @@ public class MinistranteJDialog1 extends javax.swing.JDialog {
         addRecord = true;
         clearInputBoxes();
         
-        txtSigla.setEnabled(true);
-        txtNome.setEnabled(true);
+//        txtSigla.setEnabled(true);
+//        txtNome.setEnabled(true);
         
         enableButtons(false, true, true, false);
         
-        txtSigla.requestFocus();
+//        txtSigla.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -185,8 +185,8 @@ public class MinistranteJDialog1 extends javax.swing.JDialog {
                 }
                 addRecord = false;
                 
-                txtSigla.setEnabled(false);
-                txtNome.setEnabled(false);
+//                txtSigla.setEnabled(false);
+//                txtNome.setEnabled(false);
                 
                 enableButtons(true, false, false, false);
                 
@@ -199,23 +199,7 @@ public class MinistranteJDialog1 extends javax.swing.JDialog {
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
 
-        if (!txtSigla.getText().isEmpty()) {
-            int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
-
-            if (dialogResult == JOptionPane.YES_OPTION) {
-                try {
-                    deleteRecord();
-                    loadRecords();
-                    clearInputBoxes();
-                    enableButtons(true, false, false, false);
-                    
-                    txtNome.setEnabled(false);
-                    
-                } catch (SQLException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
-        }
+       //TO-DO
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
@@ -226,8 +210,8 @@ public class MinistranteJDialog1 extends javax.swing.JDialog {
         clearInputBoxes();
         enableButtons(true, false, false, false);
         addRecord = false;
-        txtSigla.setEnabled(false);
-        txtNome.setEnabled(false);
+//        txtSigla.setEnabled(false);
+//        txtNome.setEnabled(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -248,58 +232,23 @@ public class MinistranteJDialog1 extends javax.swing.JDialog {
     boolean addRecord = false;
 
     private void clearInputBoxes() {
-        txtSigla.setText("");
-        txtNome.setText("");
+        
     }
 
     private void addNew() throws SQLException {
-        Pais p = new Pais();
-        p.setSigla(txtSigla.getText());
-        p.setNome(txtNome.getText());
-        PaisDAO dao = new PaisDAO();
-        dao.insert(p);
+        
     }
 
     private void updateRecord() throws SQLException {
-        Pais p = new Pais();
-        p.setSigla(txtSigla.getText());
-        p.setNome(txtNome.getText());
-        PaisDAO dao = new PaisDAO();
-        dao.update(p);
+        
     }
 
     private void deleteRecord() throws SQLException {
-        PaisDAO dao = new PaisDAO();
-        dao.remove(txtSigla.getText());
+        
     }
 
     private void loadRecords() throws SQLException {
-        String sql = "SELECT Sigla, Nome FROM PAIS ORDER BY sigla";
-        ResultSetTableModel tableModel = new ResultSetTableModel(sql);
-        JTablePaises.setModel(tableModel);
         
-        JTablePaises.getColumnModel().getColumn(0).setWidth(50);
-        JTablePaises.getColumnModel().getColumn(0).setMinWidth(50);
-        JTablePaises.getColumnModel().getColumn(0).setMaxWidth(50);
-        
-        JTablePaises.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
-            try {
-                if (JTablePaises.getSelectedRow() >= 0) {
-                    Object s = JTablePaises.getValueAt(JTablePaises.getSelectedRow(), 0);
-                    Object n = JTablePaises.getValueAt(JTablePaises.getSelectedRow(), 1);
-
-                    txtSigla.setText(s.toString());
-                    txtNome.setText(n.toString());
-                    txtNome.setEnabled(true);
-                    enableButtons(false, true, true, true);
-                }
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
-        });
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-        JTablePaises.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
     }
     
     public void enableButtons(boolean novo, boolean salvar, boolean cancelar, boolean remover){
