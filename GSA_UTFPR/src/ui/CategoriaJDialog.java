@@ -39,8 +39,8 @@ public class CategoriaJDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        txtSigla = new javax.swing.JTextField();
         txtNome = new javax.swing.JTextField();
-        txtNome1 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         taObservacao = new javax.swing.JTextArea();
         btnFechar = new javax.swing.JButton();
@@ -103,19 +103,19 @@ public class CategoriaJDialog extends javax.swing.JDialog {
         jLabel3.setText("Descrição:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
+        txtSigla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSiglaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtSigla, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 100, -1));
+
         txtNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNomeActionPerformed(evt);
             }
         });
-        jPanel1.add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 100, -1));
-
-        txtNome1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNome1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtNome1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, 240, -1));
+        jPanel1.add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, 240, -1));
 
         taObservacao.setColumns(20);
         taObservacao.setRows(5);
@@ -187,7 +187,7 @@ public class CategoriaJDialog extends javax.swing.JDialog {
         clearInputBoxes();
         
         txtSigla.setEnabled(true);
-        txtNome.setEnabled(true);
+        txtSigla.setEnabled(true);
         
         enableButtons(false, true, true, false);
         
@@ -207,7 +207,7 @@ public class CategoriaJDialog extends javax.swing.JDialog {
                 addRecord = false;
                 
                 txtSigla.setEnabled(false);
-                txtNome.setEnabled(false);
+                txtSigla.setEnabled(false);
                 
                 enableButtons(true, false, false, false);
                 
@@ -230,7 +230,7 @@ public class CategoriaJDialog extends javax.swing.JDialog {
                     clearInputBoxes();
                     enableButtons(true, false, false, false);
                     
-                    txtNome.setEnabled(false);
+                    txtSigla.setEnabled(false);
                     
                 } catch (SQLException ex) {
                     System.out.println(ex.getMessage());
@@ -248,16 +248,16 @@ public class CategoriaJDialog extends javax.swing.JDialog {
         enableButtons(true, false, false, false);
         addRecord = false;
         txtSigla.setEnabled(false);
-        txtNome.setEnabled(false);
+        txtSigla.setEnabled(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtSiglaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSiglaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSiglaActionPerformed
 
     private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomeActionPerformed
-
-    private void txtNome1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNome1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNome1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable JTablePaises;
@@ -274,64 +274,30 @@ public class CategoriaJDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea taObservacao;
     private javax.swing.JTextField txtNome;
-    private javax.swing.JTextField txtNome1;
+    private javax.swing.JTextField txtSigla;
     // End of variables declaration//GEN-END:variables
 
     boolean addRecord = false;
 
     private void clearInputBoxes() {
-        txtSigla.setText("");
         txtNome.setText("");
+        txtSigla.setText("");
     }
 
     private void addNew() throws SQLException {
-        Pais p = new Pais();
-        p.setSigla(txtSigla.getText());
-        p.setNome(txtNome.getText());
-        PaisDAO dao = new PaisDAO();
-        dao.insert(p);
+        //TO-DO
     }
 
     private void updateRecord() throws SQLException {
-        Pais p = new Pais();
-        p.setSigla(txtSigla.getText());
-        p.setNome(txtNome.getText());
-        PaisDAO dao = new PaisDAO();
-        dao.update(p);
+        //TO-DO
     }
 
     private void deleteRecord() throws SQLException {
-        PaisDAO dao = new PaisDAO();
-        dao.remove(txtSigla.getText());
+        //TO-DO
     }
 
     private void loadRecords() throws SQLException {
-        String sql = "SELECT Sigla, Nome FROM PAIS ORDER BY sigla";
-        ResultSetTableModel tableModel = new ResultSetTableModel(sql);
-        JTablePaises.setModel(tableModel);
-        
-        JTablePaises.getColumnModel().getColumn(0).setWidth(50);
-        JTablePaises.getColumnModel().getColumn(0).setMinWidth(50);
-        JTablePaises.getColumnModel().getColumn(0).setMaxWidth(50);
-        
-        JTablePaises.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
-            try {
-                if (JTablePaises.getSelectedRow() >= 0) {
-                    Object s = JTablePaises.getValueAt(JTablePaises.getSelectedRow(), 0);
-                    Object n = JTablePaises.getValueAt(JTablePaises.getSelectedRow(), 1);
-
-                    txtSigla.setText(s.toString());
-                    txtNome.setText(n.toString());
-                    txtNome.setEnabled(true);
-                    enableButtons(false, true, true, true);
-                }
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
-        });
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-        JTablePaises.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+        //TO-DO
     }
     
     public void enableButtons(boolean novo, boolean salvar, boolean cancelar, boolean remover){
