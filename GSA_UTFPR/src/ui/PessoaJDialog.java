@@ -329,97 +329,27 @@ public class PessoaJDialog extends javax.swing.JDialog {
     private void clearInputBoxes() {
         txtCPF.setText("");
         txtEmail.setText("");
-        txtEquipeID.setText("");
-        txtEquipeNome.setText("");
+        //TO-DO
     }
     
     private void addNew() throws SQLException, ClassNotFoundException, IOException {
-        PaisDAO pDao = new PaisDAO();
-        EquipeDAO eDao = new EquipeDAO();   
-        Piloto p = new Piloto();
-        p.setNome(txtEmail.getText());
-        p.setEquipeAtual(eDao.find(Integer.parseInt(txtEquipeID.getText())));    
-        p.setPais(pDao.find((String) CBPais.getSelectedItem()));
-        p.setStatus(CBStatus.isSelected());
-        PilotoDAO dao = new PilotoDAO();
-        dao.insert(p);
+        //TO-DO
     }
     
     private void updateRecord() throws SQLException, ClassNotFoundException, IOException {
-        PaisDAO pDao = new PaisDAO();
-        EquipeDAO eDao = new EquipeDAO();
-        Piloto p = new Piloto();
-        p.setId(Integer.parseInt(txtCPF.getText()));
-        p.setNome(txtEmail.getText());
-        p.setEquipeAtual(eDao.find(Integer.parseInt(txtEquipeID.getText())));    
-        p.setPais(pDao.find((String) CBPais.getSelectedItem()));
-        p.setStatus(CBStatus.isSelected());
-        PilotoDAO dao = new PilotoDAO();
-        dao.update(p);
+        //TO-DO
     }
 
     private void deleteRecord() throws SQLException {
-        PilotoDAO dao = new PilotoDAO();
-        dao.remove(Integer.parseInt(txtCPF.getText()));
+        //TO-DO
     }
     
     private void loadRecords() throws SQLException {
-        String sql = "SELECT P.id as ID, P.nome as Nome, equipe_id, E.nome, P.pais_sigla as 'Sigla do Pais', P.status as Status  FROM PILOTO as P, EQUIPE as E WHERE E.id = P.equipe_id;";
-        ResultSetTableModel tableModel = new ResultSetTableModel(sql);
-        JTablePilotos.setModel(tableModel);
-        
-          //Hiding column "id" and equipe_id 
-        JTablePilotos.removeColumn(JTablePilotos.getColumnModel().getColumn(0));
-        JTablePilotos.removeColumn(JTablePilotos.getColumnModel().getColumn(1));
-        
-         //Adjusting columns 
-        JTablePilotos.getColumnModel().getColumn(0).setMinWidth(120);//"nome
-        JTablePilotos.getColumnModel().getColumn(1).setMinWidth(200);//"nome da equipe
-        JTablePilotos.getColumnModel().getColumn(2).setMaxWidth(50); //"sigla"
-        JTablePilotos.getColumnModel().getColumn(3).setMaxWidth(40); //"status"
-       
-        JTablePilotos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent event) {
-                try {
-                    if (JTablePilotos.getSelectedRow() >= 0) {
-                        Object id = JTablePilotos.getModel().getValueAt(JTablePilotos.getSelectedRow(), 0);
-                        Object nome = JTablePilotos.getModel().getValueAt(JTablePilotos.getSelectedRow(), 1);
-                        Object equipe_id = JTablePilotos.getModel().getValueAt(JTablePilotos.getSelectedRow(), 2);
-                        Object pais_sigla = JTablePilotos.getModel().getValueAt(JTablePilotos.getSelectedRow(), 4);
-                        Object status = JTablePilotos.getModel().getValueAt(JTablePilotos.getSelectedRow(), 5).toString();
-                        
-                        txtCPF.setText(id.toString());
-                        txtEmail.setText(nome.toString());
-                        txtEquipeID.setText(equipe_id.toString());
-                        
-                        EquipeDAO eDao = new EquipeDAO();
-                        Equipe e = eDao.find(Integer.parseInt(equipe_id.toString()));
-                        txtEquipeNome.setText(e.getNome());             
-                        CBPais.setSelectedItem(pais_sigla.toString());
-                        CBStatus.setSelected(status.equals("true"));
-                        
-                        enableButtons(false, true, true, true);
-                        enableFields(true);
-                    }
-                } catch (IOException | ClassNotFoundException | NumberFormatException | SQLException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
-        });
-
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-        JTablePilotos.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+        //TO-DO
     }  
 
     private void fillCBPais() throws SQLException {
-        PaisDAO dao = new PaisDAO();
-        List<Pais> paises = dao.list();
-        CBPais.removeAllItems();
-        for(Pais p : paises){
-            CBPais.addItem(p.getSigla());
-        }        
+        //TO-DO
     }
     
     public void enableButtons(boolean novo, boolean salvar, boolean cancelar, boolean remover){
@@ -430,9 +360,6 @@ public class PessoaJDialog extends javax.swing.JDialog {
     }
 
     private void enableFields(boolean flag) {
-        CBStatus.setEnabled(flag);
-        CBPais.setEnabled(flag);
-        txtEmail.setEnabled(flag);
-        btnBuscaEquipe.setEnabled(flag);
+        //TO-DO
     }
 }
