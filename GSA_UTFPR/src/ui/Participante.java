@@ -5,11 +5,19 @@
  */
 package ui;
 
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableCellRenderer;
+
 /**
  *
  * @author henriko-bcc-utfpr-cm
  */
 public class Participante extends javax.swing.JDialog {
+
+    boolean addRecord;
 
     /**
      * Creates new form Participante
@@ -31,8 +39,8 @@ public class Participante extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        txtPessoa = new javax.swing.JTextField();
+        txtEvento = new javax.swing.JTextField();
         btnFechar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
@@ -45,15 +53,15 @@ public class Participante extends javax.swing.JDialog {
 
         jLabel2.setText("Evento:");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtPessoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtPessoaActionPerformed(evt);
             }
         });
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtEvento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtEventoActionPerformed(evt);
             }
         });
 
@@ -68,8 +76,8 @@ public class Participante extends javax.swing.JDialog {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -78,10 +86,10 @@ public class Participante extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -177,8 +185,8 @@ public class Participante extends javax.swing.JDialog {
         clearInputBoxes();
         enableButtons(true, false, false, false);
         addRecord = false;
-        txtSigla.setEnabled(false);
-        txtNome.setEnabled(false);
+        txtEvento.setEnabled(false);
+        txtPessoa.setEnabled(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -193,8 +201,8 @@ public class Participante extends javax.swing.JDialog {
                 }
                 addRecord = false;
 
-                txtSigla.setEnabled(false);
-                txtNome.setEnabled(false);
+                txtEvento.setEnabled(false);
+                txtPessoa.setEnabled(false);
 
                 enableButtons(true, false, false, false);
 
@@ -207,7 +215,7 @@ public class Participante extends javax.swing.JDialog {
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
 
-        if (!txtSigla.getText().isEmpty()) {
+        if (!txtEvento.getText().isEmpty()) {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
 
             if (dialogResult == JOptionPane.YES_OPTION) {
@@ -217,7 +225,7 @@ public class Participante extends javax.swing.JDialog {
                     clearInputBoxes();
                     enableButtons(true, false, false, false);
 
-                    txtNome.setEnabled(false);
+                    txtPessoa.setEnabled(false);
 
                 } catch (SQLException ex) {
                     System.out.println(ex.getMessage());
@@ -230,21 +238,21 @@ public class Participante extends javax.swing.JDialog {
         addRecord = true;
         clearInputBoxes();
 
-        txtSigla.setEnabled(true);
-        txtNome.setEnabled(true);
+        txtEvento.setEnabled(true);
+        txtPessoa.setEnabled(true);
 
         enableButtons(false, true, true, false);
 
-        txtSigla.requestFocus();
+        txtPessoa.requestFocus();
     }//GEN-LAST:event_btnNovoActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPessoaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtPessoaActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEventoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtEventoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -297,7 +305,35 @@ public class Participante extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField txtEvento;
+    private javax.swing.JTextField txtPessoa;
     // End of variables declaration//GEN-END:variables
+
+    private void addNew() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void updateRecord() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void enableButtons(boolean novo, boolean salvar, boolean cancelar, boolean remover) {
+          btnNovo.setEnabled(novo);
+        btnSalvar.setEnabled(salvar);
+        btnCancelar.setEnabled(cancelar);
+        btnRemover.setEnabled(remover);
+    }
+
+    private void loadRecords() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void deleteRecord() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void clearInputBoxes() {
+        txtEvento.setText("");
+        txtPessoa.setText("");
+    }
 }
