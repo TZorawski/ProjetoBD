@@ -1,21 +1,24 @@
 package ui;
 
 import dao.CursoDAO;
-import dao.CursoDAO;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import model.Curso;
-import model.Curso;
+
 
 /**
  *
  * @author André Schwerz
  */
 public class CursoJDialog extends javax.swing.JDialog {
+
+    boolean addRecord = false;
 
     public CursoJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -181,12 +184,14 @@ public class CursoJDialog extends javax.swing.JDialog {
 
     private void txtSiglaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSiglaKeyTyped
         if (txtSigla.getText().length() >= 5 ) // limit textfield to 3 characters
-            evt.consume();     
+            evt.consume();
+        enableButtons(true, true, true, true, true, true);
     }//GEN-LAST:event_txtSiglaKeyTyped
 
     private void txtNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyTyped
         if (txtNome.getText().length() >= 100 )
             evt.consume();     
+        enableButtons(true, true, true, true, true, true);
     }//GEN-LAST:event_txtNomeKeyTyped
 
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
@@ -194,11 +199,14 @@ public class CursoJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnFecharActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-//        addRecord = true;
-//        clearInputBoxes();
-//
-//        enableButtons(false, true, true, false);
-//        enableFields(true);
+        clearInputBoxes();
+        try {
+            loadRecords();
+        } catch (SQLException ex) {
+            Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        enableButtons(true, true, true, true, true, true);
+        enableFields(true);
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
@@ -206,16 +214,9 @@ public class CursoJDialog extends javax.swing.JDialog {
 
         if (dialogResult == JOptionPane.YES_OPTION) {
             try {
-                if (addRecord == true) {
-                    addNew();
-                } else {
-                    updateRecord();
-                }
-                addRecord = false;
+                addNew();
                 loadRecords();
-
-                enableButtons(true, false, false, false);
-                //enableFields(false);
+                enableButtons(true, true, true, true, true, true);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -227,11 +228,10 @@ public class CursoJDialog extends javax.swing.JDialog {
 
         if (dialogResult == JOptionPane.YES_OPTION) {
             try {
-                deleteRecord();
+                updateRecord();
                 loadRecords();
                 clearInputBoxes();
-                enableButtons(true, false, false, false);
-                //enableFields(false);
+                enableButtons(true, true, true, true, true, true);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -239,9 +239,18 @@ public class CursoJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        clearInputBoxes();
-        enableButtons(true, false, false, false);
-        //enableFields(false);
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
+
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            try {
+                deleteRecord();
+                clearInputBoxes();
+                loadRecords();
+                enableButtons(true, true, true, true, true, true);
+            } catch (SQLException ex) {
+                Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -260,7 +269,6 @@ public class CursoJDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtSigla;
     // End of variables declaration//GEN-END:variables
 
-    boolean addRecord = false;
 
     private void clearInputBoxes() {
         txtSigla.setText("");
@@ -289,7 +297,7 @@ public class CursoJDialog extends javax.swing.JDialog {
     }
 
     private void loadRecords() throws SQLException {
-        String sql = "SELECT Sigla, Nome FROM CURSOS ORDER BY sigla";
+        String sql = "SELECT sigla, nome FROM Cursos ORDER BY sigla";
         ResultSetTableModel tableModel = new ResultSetTableModel(sql);
         JTableCursos.setModel(tableModel);
         
@@ -306,7 +314,7 @@ public class CursoJDialog extends javax.swing.JDialog {
                     txtSigla.setText(s.toString());
                     txtNome.setText(n.toString());
                     txtNome.setEnabled(true);
-                    enableButtons(false, true, true, true);
+                    enableButtons(true, true, true, true, true, true);
                 }
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
@@ -317,10 +325,17 @@ public class CursoJDialog extends javax.swing.JDialog {
         JTableCursos.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
     }
     
-    public void enableButtons(boolean novo, boolean salvar, boolean cancelar, boolean remover){
-        btnCadastrar.setEnabled(novo);
-        btnSalvar.setEnabled(salvar);
-        btnRemover.setEnabled(cancelar);
+    public void enableButtons(boolean pesquisar, boolean cadastrar, boolean editar, boolean remover, boolean salvar, boolean cancelar){
+        btnPesquisar.setEnabled(pesquisar);
+        btnCadastrar.setEnabled(cadastrar);
+        btnEditar.setEnabled(editar);
         btnRemover.setEnabled(remover);
+        btnSalvar.setEnabled(salvar);
+        btnFechar.setEnabled(cancelar);
+    }
+
+    private void enableFields(boolean b) {
+        txtSigla.enableInputMethods(b);
+        txtNome.enableInputMethods(b);
     }
 }
