@@ -94,7 +94,6 @@ public class CursoJDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtSigla.setToolTipText("");
-        txtSigla.setEnabled(false);
         txtSigla.setName("txtSigla"); // NOI18N
         txtSigla.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -110,7 +109,6 @@ public class CursoJDialog extends javax.swing.JDialog {
         jLabel2.setAlignmentX(1.0F);
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 20, 70, 20));
 
-        txtNome.setEnabled(false);
         txtNome.setName("txtNome"); // NOI18N
         txtNome.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -182,12 +180,12 @@ public class CursoJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtSiglaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSiglaKeyTyped
-        if (txtSigla.getText().length() <= 5 ) // limit textfield to 3 characters
+        if (txtSigla.getText().length() >= 5 ) // limit textfield to 3 characters
             evt.consume();     
     }//GEN-LAST:event_txtSiglaKeyTyped
 
     private void txtNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyTyped
-        if (txtNome.getText().length() <= 100 )
+        if (txtNome.getText().length() >= 100 )
             evt.consume();     
     }//GEN-LAST:event_txtNomeKeyTyped
 
@@ -291,7 +289,7 @@ public class CursoJDialog extends javax.swing.JDialog {
     }
 
     private void loadRecords() throws SQLException {
-        String sql = "SELECT Sigla, Nome FROM CURSO ORDER BY sigla";
+        String sql = "SELECT Sigla, Nome FROM CURSOS ORDER BY sigla";
         ResultSetTableModel tableModel = new ResultSetTableModel(sql);
         JTableCursos.setModel(tableModel);
         

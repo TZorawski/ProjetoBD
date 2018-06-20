@@ -13,11 +13,11 @@ import java.util.ArrayList;
  */
 public class CursoDAO extends DbConnection{
     private Connection conn;
-    private final String sqlInsert = "INSERT INTO Curso (sigla, nome) VALUES (?,?)";
-    private final String sqlUpdate = "UPDATE Curso SET nome = ? WHERE sigla = ? ";
-    private final String sqlRemove = "DELETE FROM Curso WHERE sigla = ?";
-    private final String sqlList   = "SELECT sigla, nome FROM Curso ORDER BY nome";
-    private final String sqlFind   = "SELECT sigla, nome FROM Curso WHERE sigla = ?";
+    private final String sqlInsert = "INSERT INTO Cursos (sigla, nome) VALUES (?,?)";
+    private final String sqlUpdate = "UPDATE Cursos SET nome = ? WHERE sigla = ? ";
+    private final String sqlRemove = "DELETE FROM Cursos WHERE sigla = ?";
+    private final String sqlList   = "SELECT sigla, nome FROM Cursos ORDER BY nome";
+    private final String sqlFind   = "SELECT sigla, nome FROM Cursos WHERE sigla = ?";
 
     public void insert(Curso curso) throws SQLException{
         conn = connect();
