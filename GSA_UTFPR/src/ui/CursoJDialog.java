@@ -43,7 +43,7 @@ public class CursoJDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
-        btnFechar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         btnPesquisar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
@@ -119,15 +119,15 @@ public class CursoJDialog extends javax.swing.JDialog {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 490, 140));
 
-        btnFechar.setText("Cancelar");
-        btnFechar.setActionCommand("btnFechar");
-        btnFechar.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnFechar.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setActionCommand("btnFechar");
+        btnCancelar.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFecharActionPerformed(evt);
+                btnCancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnFechar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 390, 90, 40));
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 390, 90, 40));
 
         btnPesquisar.setText("Pesquisar");
         btnPesquisar.setActionCommand("btnNovo");
@@ -141,7 +141,6 @@ public class CursoJDialog extends javax.swing.JDialog {
 
         btnCadastrar.setText("Cadastrar");
         btnCadastrar.setActionCommand("btnAlterar");
-        btnCadastrar.setEnabled(false);
         btnCadastrar.setPreferredSize(new java.awt.Dimension(90, 29));
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -189,16 +188,16 @@ public class CursoJDialog extends javax.swing.JDialog {
             evt.consume();     
     }//GEN-LAST:event_txtNomeKeyTyped
 
-    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
-    }//GEN-LAST:event_btnFecharActionPerformed
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-//        addRecord = true;
-//        clearInputBoxes();
-//
-//        enableButtons(false, true, true, false);
-//        enableFields(true);
+        addRecord = true;
+        clearInputBoxes();
+
+        enableButtons(true, true, true, true, true, true);
+        enableFields(true, true);
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
@@ -214,7 +213,7 @@ public class CursoJDialog extends javax.swing.JDialog {
                 addRecord = false;
                 loadRecords();
 
-                enableButtons(true, false, false, false);
+                enableButtons(true, false, false, false, true, true);
                 //enableFields(false);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
@@ -230,7 +229,7 @@ public class CursoJDialog extends javax.swing.JDialog {
                 deleteRecord();
                 loadRecords();
                 clearInputBoxes();
-                enableButtons(true, false, false, false);
+                enableButtons(true, false, false, false, true, true);
                 //enableFields(false);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
@@ -240,15 +239,15 @@ public class CursoJDialog extends javax.swing.JDialog {
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
         clearInputBoxes();
-        enableButtons(true, false, false, false);
+        enableButtons(true, false, false, false, true, true);
         //enableFields(false);
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable JTableCursos;
     private javax.swing.JButton btnCadastrar;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnRemover;
     private javax.swing.JButton btnSalvar;
@@ -260,7 +259,7 @@ public class CursoJDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtSigla;
     // End of variables declaration//GEN-END:variables
 
-    boolean addRecord = false;
+    boolean addRecord = true;
 
     private void clearInputBoxes() {
         txtSigla.setText("");
@@ -272,6 +271,7 @@ public class CursoJDialog extends javax.swing.JDialog {
         c.setSigla(txtSigla.getText());
         c.setNome(txtNome.getText());
         CursoDAO dao = new CursoDAO();
+        System.out.println("PASSSSOUUUUU");
         dao.insert(c);
     }
 
@@ -306,7 +306,7 @@ public class CursoJDialog extends javax.swing.JDialog {
                     txtSigla.setText(s.toString());
                     txtNome.setText(n.toString());
                     txtNome.setEnabled(true);
-                    enableButtons(false, true, true, true);
+                    enableButtons(false, true, true, true, true, true);
                 }
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
@@ -317,10 +317,17 @@ public class CursoJDialog extends javax.swing.JDialog {
         JTableCursos.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
     }
     
-    public void enableButtons(boolean novo, boolean salvar, boolean cancelar, boolean remover){
-        btnCadastrar.setEnabled(novo);
-        btnSalvar.setEnabled(salvar);
-        btnRemover.setEnabled(cancelar);
+    public void enableButtons(boolean pesquisar, boolean cadastrar, boolean editar, boolean remover, boolean salvar, boolean cancelar){
+        btnPesquisar.setEnabled(pesquisar);
+        btnCadastrar.setEnabled(cadastrar);
+        btnEditar.setEnabled(editar);
         btnRemover.setEnabled(remover);
+        btnSalvar.setEnabled(salvar);
+        btnCancelar.setEnabled(cancelar);
+    }
+
+    private void enableFields(boolean sigla, boolean nome) {
+        txtSigla.setEnabled(sigla);
+        txtNome.setEnabled(nome);
     }
 }
