@@ -170,6 +170,11 @@ public class CursoJDialog extends javax.swing.JDialog {
 
         btnSalvar.setText("Salvar");
         btnSalvar.setEnabled(false);
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, 80, 40));
 
         pack();
@@ -226,7 +231,30 @@ public class CursoJDialog extends javax.swing.JDialog {
         enableButtons(false, false, false, false, true, true);
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {
+    
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        addRecord = false;
+        enableFields(false, true);
+        enableButtons(false, false, false, false, true, true);
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
+
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            try {
+                deleteRecord();
+                clearInputBoxes();
+                loadRecords();
+                enableButtons(true, false, false, false, false, false);
+                enableFields(true, false);
+            } catch (SQLException ex) {
+                Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         if (addRecord == true) {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja salvar esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
 
@@ -254,29 +282,7 @@ public class CursoJDialog extends javax.swing.JDialog {
                 }
             }
         }
-    }
-    
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        addRecord = false;
-        enableFields(false, true);
-        enableButtons(false, false, false, false, true, true);
-    }//GEN-LAST:event_btnEditarActionPerformed
-
-    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
-
-        if (dialogResult == JOptionPane.YES_OPTION) {
-            try {
-                deleteRecord();
-                clearInputBoxes();
-                loadRecords();
-                enableButtons(true, false, false, false, false, false);
-                enableFields(true, false);
-            } catch (SQLException ex) {
-                Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_btnRemoverActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable JTableCursos;
@@ -306,7 +312,6 @@ public class CursoJDialog extends javax.swing.JDialog {
         c.setSigla(txtSigla.getText());
         c.setNome(txtNome.getText());
         CursoDAO dao = new CursoDAO();
-        System.out.println("PASSSSOUUUUU");
         dao.insert(c);
     }
 
