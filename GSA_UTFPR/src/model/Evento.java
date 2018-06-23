@@ -74,7 +74,7 @@ public class Evento {
     }
 
     public void setDataInicioMySQL(String dataInicio) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date utilDate = format.parse(dataInicio);
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
         this.dataInicio = sqlDate;
@@ -110,6 +110,21 @@ public class Evento {
     }
 
     public void setDataFimMySQL(String dataFim) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date utilDate = format.parse(dataFim);
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        this.dataFim = sqlDate;
+    }
+    
+     public void setDataInicioMySQL2(String dataInicio) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        java.util.Date utilDate = format.parse(dataInicio);
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        this.dataInicio = sqlDate;
+        
+    }
+     
+     public void setDataFimMySQL2(String dataFim) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         java.util.Date utilDate = format.parse(dataFim);
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());

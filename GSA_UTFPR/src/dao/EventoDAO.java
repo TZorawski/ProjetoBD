@@ -45,11 +45,12 @@ public class EventoDAO extends DbConnection {
         try {
             conn = connect();
             ps = conn.prepareStatement(sqlUpdate);
-            ps.setString(1, evento.getSigla());
-            ps.setString(2, evento.getNome());
-            ps.setString(3, evento.getDataInicioMySQL());
-            ps.setString(4, evento.getDataFimMySQL());
-            ps.setString(5, evento.getCurso().getSigla());
+            
+            ps.setString(1, evento.getNome());
+            ps.setString(2, evento.getDataInicioMySQL());
+            ps.setString(3, evento.getDataFimMySQL());
+            ps.setString(4, evento.getCurso().getSigla());
+            ps.setString(5, evento.getSigla());
             ps.execute();
         } finally {
             ps.close();

@@ -527,7 +527,7 @@ private boolean addRecord;
                 deleteRecord();
                 clearInputBoxes();
                 loadRecords();
-                enableButtons(true, true, true, true, true, true);
+                enableButtons(true, false, false, false, false, false);
                 enableFields(true, false, false, false, false);
             } catch (SQLException ex) {
                 Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
@@ -538,13 +538,13 @@ private boolean addRecord;
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         addRecord = false;
         enableFields(false, true, true, true, true);
-        enableButtons(false, false, false, true, true, true);
+        enableButtons(false, false, false, false, true, true);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         addRecord = true;
         enableFields(true, true, true, true, true);
-        enableButtons(true, true, true, false, true, true);
+        enableButtons(false, false, false, false, true, true);
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
@@ -562,10 +562,12 @@ private boolean addRecord;
         }
         //Verifica se o objeto ja esta cadastrado
         if (evento == null) {//Nao esta
-            enableButtons(false, true, false, false, true, true);
+            enableButtons(true, true, false, false, false, false);
         }else{//Ja esta
             txtNome.setText(evento.getNome());
-            enableButtons(false, false, true, true, true, true);
+            txtInicio.setText(evento.getStrDataInicio());
+            txtFim.setText(evento.getStrDataFim());                       
+            enableButtons(true, false, true, true, false, false);
         }
 
     }//GEN-LAST:event_btnPesquisarActionPerformed
@@ -610,8 +612,8 @@ private boolean addRecord;
             try {
                 addNew();
                 loadRecords();
-                enableFields(true, false, true, true, true);
-                enableButtons(true, true, true, true, true, true);
+                enableFields(true, true, true, true, true);
+                enableButtons(true, false, true, true, false, false);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } catch (ParseException ex) {
@@ -625,7 +627,7 @@ private boolean addRecord;
             try {
                 updateRecord();
                 loadRecords();
-                enableFields(true, false, true, true, true);
+                enableFields(true, true, true, true, true);
                 enableButtons(true, true, true, true, true, true);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
@@ -681,8 +683,8 @@ private boolean addRecord;
         evt.setSigla(txtSigla.getText());
         evt.setNome(txtNome.getText());
         evt.setCurso(eDao.find((String) cbCurso.getSelectedItem()));
-        evt.setDataInicioMySQL(txtInicio.getText());
-        evt.setDataFimMySQL(txtFim.getText());
+        evt.setDataInicioMySQL2(txtInicio.getText());
+        evt.setDataFimMySQL2(txtFim.getText());
         EventoDAO dao = new EventoDAO();
         dao.insert(evt);
     }
@@ -693,8 +695,8 @@ private boolean addRecord;
         e.setSigla(txtSigla.getText());
         e.setNome(txtNome.getText());
         e.setCurso(eDao.find((String) cbCurso.getSelectedItem()));
-        e.setDataInicioMySQL(txtInicio.getText());
-        e.setDataFimMySQL(txtFim.getText());
+        e.setDataInicioMySQL2(txtInicio.getText());
+        e.setDataFimMySQL2(txtFim.getText());
         EventoDAO dao = new EventoDAO();
         dao.update(e);
     }
@@ -747,7 +749,7 @@ private boolean addRecord;
         JTableEvento.setModel(tableModel);
         
         //Adjusting columns 
-       JTableEvento.getColumnModel().getColumn(0).setWidth(200);
+        JTableEvento.getColumnModel().getColumn(0).setWidth(200);
         JTableEvento.getColumnModel().getColumn(0).setMinWidth(50);
         JTableEvento.getColumnModel().getColumn(0).setMaxWidth(200);
        
@@ -773,8 +775,8 @@ private boolean addRecord;
                         txtFim.setText(dataFim.toString());
                         cbCurso.setSelectedItem(curso.toString());
                         
-                        enableButtons(true, true, true, true, true, true);
-                        enableFields(true, false, false, false, false);
+                        enableButtons(false, false, true, true, true, true);
+                        enableFields(true, true, false, false, false);
                         
                     }
                 } catch (Exception ex) {
@@ -795,5 +797,5 @@ private boolean addRecord;
             return dateFormat.format(utilDate);
         }
         return null;
-    }   
+    }    
 }
