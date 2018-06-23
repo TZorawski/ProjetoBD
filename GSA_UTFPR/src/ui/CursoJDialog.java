@@ -1,7 +1,6 @@
 package ui;
 
 import dao.CursoDAO;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +23,10 @@ public class CursoJDialog extends javax.swing.JDialog {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    CursoJDialog() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @SuppressWarnings("unchecked")
@@ -184,13 +187,11 @@ public class CursoJDialog extends javax.swing.JDialog {
     private void txtSiglaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSiglaKeyTyped
         if (txtSigla.getText().length() >= 5 ) // limit textfield to 3 characters
             evt.consume();
-        //enableButtons(true, true, true, true, true, true);
     }//GEN-LAST:event_txtSiglaKeyTyped
 
     private void txtNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyTyped
         if (txtNome.getText().length() >= 100 )
             evt.consume();     
-        //enableButtons(true, true, true, true, true, true);
     }//GEN-LAST:event_txtNomeKeyTyped
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -200,12 +201,6 @@ public class CursoJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-//        try {
-//            loadRecords();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
         String sigla = txtSigla.getText();
         CursoDAO dao = new CursoDAO();
         Curso cur = new Curso();
@@ -299,8 +294,6 @@ public class CursoJDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtSigla;
     // End of variables declaration//GEN-END:variables
-
-    //boolean addRecord = true;
 
     private void clearInputBoxes() {
         txtSigla.setText("");
