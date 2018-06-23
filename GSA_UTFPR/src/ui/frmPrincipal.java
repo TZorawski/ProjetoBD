@@ -1,8 +1,20 @@
 package ui;
 
-import javax.swing.JOptionPane;
+import dao.DbConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.ComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,6 +31,20 @@ public class frmPrincipal extends javax.swing.JFrame {
         }
     }
 
+
+    
+    void combo() throws SQLException{//falta arrumar essa conexão
+        PreparedStatement ps = dao.EventoDAO.prepareStatement("SELECT sigla FROM Cursos");
+        ResultSet result = ps.executeQuery();
+        List<String> lista = new ArrayList<String>();
+        
+        while(result.next()){
+            String sigla=result.getString("sigla");
+            lista.add(sigla);
+        }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,7 +54,6 @@ public class frmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnAtividade = new javax.swing.JButton();
         btnMinistrante = new javax.swing.JButton();
@@ -43,14 +68,14 @@ public class frmPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        tfSigla = new javax.swing.JTextField();
+        txtSigla = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        tfNome = new javax.swing.JTextField();
-        ftfDataInicio = new javax.swing.JFormattedTextField();
+        txtNome = new javax.swing.JTextField();
+        txtInicio = new javax.swing.JFormattedTextField();
         jLabel6 = new javax.swing.JLabel();
-        ftfDataFim = new javax.swing.JFormattedTextField();
+        txtFim = new javax.swing.JFormattedTextField();
         jLabel7 = new javax.swing.JLabel();
         cbCurso = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
@@ -59,11 +84,9 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnCadastrar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
         btnListar = new javax.swing.JButton();
         btnAddCurso = new javax.swing.JButton();
-
-        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciamento de Fórmula 1");
@@ -189,7 +212,11 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         jLabel7.setText("Curso:");
 
-        cbCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbCurso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCursoActionPerformed(evt);
+            }
+        });
 
         btnFechar.setText("Cancelar");
         btnFechar.setActionCommand("btnFechar");
@@ -245,8 +272,8 @@ public class frmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Salvar");
-        jButton2.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        btnSalvar.setText("Salvar");
+        btnSalvar.setMargin(new java.awt.Insets(2, 5, 2, 5));
 
         btnListar.setText("Listar");
         btnListar.addActionListener(new java.awt.event.ActionListener() {
@@ -274,7 +301,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
-                    .addComponent(jButton2)
+                    .addComponent(btnSalvar)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 98, Short.MAX_VALUE)))
@@ -293,7 +320,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                         .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
@@ -318,8 +345,8 @@ public class frmPrincipal extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfSigla, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfNome, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtSigla, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -330,16 +357,16 @@ public class frmPrincipal extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(ftfDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(ftfDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtFim, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(cbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnAddCurso)))))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -348,18 +375,18 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(tfSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(tfNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
-                    .addComponent(ftfDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(ftfDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -427,7 +454,9 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPessoaActionPerformed
 
     private void btnAddCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCursoActionPerformed
-        // TODO add your handling code here:
+        CursoJDialog form = new CursoJDialog(null, true);
+        form.setLocationRelativeTo(null);
+        form.setVisible(true);
     }//GEN-LAST:event_btnAddCursoActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
@@ -478,11 +507,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-//        addRecord = true;
-//        clearInputBoxes();
-//
-//        enableButtons(false, true, true, false);
-//        enableFields(true);
+       combo();
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
@@ -494,6 +519,10 @@ public class frmPrincipal extends javax.swing.JFrame {
         form.setLocationRelativeTo(null);
         form.setVisible(true);
     }//GEN-LAST:event_btnCursoActionPerformed
+
+    private void cbCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCursoActionPerformed
+//
+    }//GEN-LAST:event_cbCursoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddCurso;
@@ -512,11 +541,8 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnParticipante;
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnPessoa;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cbCurso;
-    private javax.swing.JFormattedTextField ftfDataFim;
-    private javax.swing.JFormattedTextField ftfDataInicio;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -528,7 +554,49 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField tfNome;
-    private javax.swing.JTextField tfSigla;
+    private javax.swing.JFormattedTextField txtFim;
+    private javax.swing.JFormattedTextField txtInicio;
+    private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtSigla;
     // End of variables declaration//GEN-END:variables
+
+    private void addNew() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void updateRecord() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
+    private void loadRecords() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void deleteRecord() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+     public void enableButtons(boolean pesquisar, boolean cadastrar, boolean editar, boolean remover, boolean salvar, boolean cancelar){
+        btnPesquisar.setEnabled(pesquisar);
+        btnCadastrar.setEnabled(cadastrar);
+        btnEditar.setEnabled(editar);
+        btnCancelar.setEnabled(remover);
+        btnSalvar.setEnabled(salvar);
+        btnFechar.setEnabled(cancelar);
+    }
+    
+    private void clearInputBoxes() {
+        txtSigla.setText("");
+        txtNome.setText("");
+        txtFim.setText("");
+        txtInicio.setText("");
+    }
+
+    private void enableFields(boolean sigla, boolean nome, boolean txtini, boolean txtf ) {
+        txtSigla.enableInputMethods(sigla);
+        txtNome.enableInputMethods(nome);
+        txtInicio.enableInputMethods(txtini);
+        txtFim.enableInputMethods(txtf);
+    }
 }
