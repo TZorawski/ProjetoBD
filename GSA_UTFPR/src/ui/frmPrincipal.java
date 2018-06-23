@@ -2,22 +2,18 @@ package ui;
 
 import dao.CursoDAO;
 import dao.EventoDAO;
-import dao.DbConnection;
+import java.io.IOException;
+import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.ComboBoxModel;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
@@ -26,22 +22,26 @@ import javax.swing.table.DefaultTableCellRenderer;
 import model.Curso;
 import model.Evento;
 
+
+
 /**
  *
  * @author André Schwerz
  */
 public class frmPrincipal extends javax.swing.JFrame {
 
-    public frmPrincipal() throws SQLException {
+    
+    public frmPrincipal() throws SQLException, ParseException {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             initComponents();
-            fillcbEvento();
+            fillcbEvento();         
+            loadRecords();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             System.out.println(ex.getMessage());
         }
     }
-
+private boolean addRecord;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -76,11 +76,11 @@ public class frmPrincipal extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         cbCurso = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
-        btnFechar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         btnPesquisar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
         btnListar = new javax.swing.JButton();
         btnAddCurso = new javax.swing.JButton();
@@ -222,6 +222,12 @@ public class frmPrincipal extends javax.swing.JFrame {
 
         jLabel5.setText("De");
 
+        txtInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtInicioActionPerformed(evt);
+            }
+        });
+
         jLabel6.setText("a");
 
         jLabel7.setText("Curso:");
@@ -232,13 +238,13 @@ public class frmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnFechar.setText("Cancelar");
-        btnFechar.setActionCommand("btnFechar");
-        btnFechar.setMargin(new java.awt.Insets(2, 5, 2, 5));
-        btnFechar.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnFechar.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setActionCommand("btnFechar");
+        btnCancelar.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        btnCancelar.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFecharActionPerformed(evt);
+                btnCancelarActionPerformed(evt);
             }
         });
 
@@ -275,19 +281,24 @@ public class frmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnCancelar.setText("Remover");
-        btnCancelar.setActionCommand("btnImprimir");
-        btnCancelar.setEnabled(false);
-        btnCancelar.setMargin(new java.awt.Insets(2, 5, 2, 5));
-        btnCancelar.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btnRemover.setText("Remover");
+        btnRemover.setActionCommand("btnImprimir");
+        btnRemover.setEnabled(false);
+        btnRemover.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        btnRemover.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
+                btnRemoverActionPerformed(evt);
             }
         });
 
         btnSalvar.setText("Salvar");
         btnSalvar.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         btnListar.setText("Listar");
         btnListar.addActionListener(new java.awt.event.ActionListener() {
@@ -313,11 +324,11 @@ public class frmPrincipal extends javax.swing.JFrame {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(18, 18, 18)
                     .addComponent(btnSalvar)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 98, Short.MAX_VALUE)))
         );
         jPanel3Layout.setVerticalGroup(
@@ -333,9 +344,9 @@ public class frmPrincipal extends javax.swing.JFrame {
                         .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRemover, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -402,11 +413,11 @@ public class frmPrincipal extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtFim, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtFim, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(cbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -501,32 +512,69 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddCursoActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-
+        try {
+            loadRecords();
+                    } catch (SQLException ex) {
+            Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnListarActionPerformed
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+     int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
 
-    }//GEN-LAST:event_btnCancelarActionPerformed
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            try {
+                deleteRecord();
+                clearInputBoxes();
+                loadRecords();
+                enableButtons(true, true, true, true, true, true);
+                enableFields(true, false, false, false, false);
+            } catch (SQLException ex) {
+                Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-
+        addRecord = false;
+        enableFields(false, true, true, true, true);
+        enableButtons(false, false, false, true, true, true);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-
+        addRecord = true;
+        enableFields(true, true, true, true, true);
+        enableButtons(true, true, true, false, true, true);
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+        String sigla = txtSigla.getText();
+        EventoDAO dao = new EventoDAO();
+        Evento evento = new Evento();
         try {
-            loadRecords();
+            try {
+                evento = dao.find(sigla);
+            } catch (ParseException ex) {
+                Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //Verifica se o objeto ja esta cadastrado
+        if (evento == null) {//Nao esta
+            enableButtons(false, true, false, false, true, true);
+        }else{//Ja esta
+            txtNome.setText(evento.getNome());
+            enableButtons(false, false, true, true, true, true);
+        }
+
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
-    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnFecharActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        clearInputBoxes();
+        enableButtons(true, true, true, true, true, true);
+        enableFields(true, false, false, false, false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCursoActionPerformed
         CursoJDialog form = new CursoJDialog(null, true);
@@ -550,6 +598,44 @@ public class frmPrincipal extends javax.swing.JFrame {
     JOptionPane.showMessageDialog(null, "Função não implementada ainda!");
     }//GEN-LAST:event_btnCategoriaActionPerformed
 
+    private void txtInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInicioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtInicioActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+    if (addRecord == true) {
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja salvar esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
+
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            try {
+                addNew();
+                loadRecords();
+                enableFields(true, false, true, true, true);
+                enableButtons(true, true, true, true, true, true);
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } catch (ParseException ex) {
+                Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    } else {
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja alterar esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
+
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            try {
+                updateRecord();
+                loadRecords();
+                enableFields(true, false, true, true, true);
+                enableButtons(true, true, true, true, true, true);
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } catch (ParseException ex) {
+                Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable JTableEvento;
     private javax.swing.JButton btnAddCurso;
@@ -559,7 +645,6 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnCategoria;
     private javax.swing.JButton btnCurso;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnFuncao;
     private javax.swing.JButton btnInscricao;
     private javax.swing.JButton btnListar;
@@ -568,6 +653,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnParticipante;
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnPessoa;
+    private javax.swing.JButton btnRemover;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cbCurso;
     private javax.swing.JLabel jLabel1;
@@ -590,14 +676,15 @@ public class frmPrincipal extends javax.swing.JFrame {
 
     private void addNew() throws SQLException, ParseException {
         CursoDAO eDao = new CursoDAO(); 
-        Evento e = new Evento();
-        e.setSigla(txtSigla.getText());
-        e.setNome(txtNome.getText());
-        e.setCurso(eDao.find((String) cbCurso.getSelectedItem()));
-        e.setDataInicioMySQL(txtInicio.getText());
-        e.setDataFimMySQL(txtFim.getText());
+        Evento evt = new Evento();
+        
+        evt.setSigla(txtSigla.getText());
+        evt.setNome(txtNome.getText());
+        evt.setCurso(eDao.find((String) cbCurso.getSelectedItem()));
+        evt.setDataInicioMySQL(txtInicio.getText());
+        evt.setDataFimMySQL(txtFim.getText());
         EventoDAO dao = new EventoDAO();
-        dao.insert(e);
+        dao.insert(evt);
     }
 
     private void updateRecord() throws SQLException, ParseException {
@@ -625,9 +712,9 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnPesquisar.setEnabled(pesquisar);
         btnCadastrar.setEnabled(cadastrar);
         btnEditar.setEnabled(editar);
-        btnCancelar.setEnabled(remover);
+        btnRemover.setEnabled(remover);
         btnSalvar.setEnabled(salvar);
-        btnFechar.setEnabled(cancelar);
+        btnCancelar.setEnabled(cancelar);
     }
     
     private void clearInputBoxes() {
@@ -668,13 +755,16 @@ public class frmPrincipal extends javax.swing.JFrame {
             @Override
             public void valueChanged(ListSelectionEvent event) {
                 try {
-                    if (JTableEvento.getSelectedRow() >= 0) {
-//                        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-                        
+                    if (JTableEvento.getSelectedRow() >= 0) {                        
                         Object sigla = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 0);
-                        Object nome = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 1);
-                        Object dataInicio = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 2).toString();
-                        Object dataFim = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 3).toString();
+                        Object nome = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 1);                      
+                        String dataInicio = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 2).toString();
+                        String dataFim =  JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 3).toString();
+                        
+                        
+                        dataInicio= sqlDateToString((Date) JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 2));
+                        dataFim= sqlDateToString((Date) JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 3));                    
+                       
                         Object curso = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 4);
                         
                         txtSigla.setText(sigla.toString());
@@ -683,12 +773,9 @@ public class frmPrincipal extends javax.swing.JFrame {
                         txtFim.setText(dataFim.toString());
                         cbCurso.setSelectedItem(curso.toString());
                         
-                        //enableButtons(false, true, true, true);
-                        txtSigla.setEnabled(true);
-                        txtNome.setEnabled(true);
-                        txtInicio.setEnabled(true);
-                        txtFim.setEnabled(true);
-                        cbCurso.setEnabled(true);
+                        enableButtons(true, true, true, true, true, true);
+                        enableFields(true, false, false, false, false);
+                        
                     }
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
@@ -701,4 +788,12 @@ public class frmPrincipal extends javax.swing.JFrame {
         JTableEvento.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
     }
     
+    public static String sqlDateToString(java.sql.Date date){
+        if(date != null) {
+            java.util.Date utilDate = new java.util.Date(date.getTime());
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+            return dateFormat.format(utilDate);
+        }
+        return null;
+    }   
 }

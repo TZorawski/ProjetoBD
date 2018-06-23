@@ -17,11 +17,11 @@ import java.util.List;
 public class EventoDAO extends DbConnection {
 
     private Connection conn;
-    private final String sqlInsert = "INSERT INTO Evento() VALUES (?,?,?,?,?)";
+    private final String sqlInsert = "INSERT INTO Evento(sigla, nome, dataInicio, dataFim, curso) VALUES (?,?,?,?,?)";
     private final String sqlUpdate = "UPDATE Evento SET nome= ?, dataInicio= ?, dataFim= ?, curso= ? WHERE sigla = ?";
     private final String sqlRemove = "DELETE FROM Evento WHERE sigla = ?";
     private final String sqlList = "SELECT sigla, nome, dataInicio, dataFim, curso FROM Evento ORDER BY curso";
-    private final String sqlFind = "SELECT sigla, nome, dataInicio, dataFim, curso  FROM Evento WHERE sigla = ?";
+    private final String sqlFind = "SELECT sigla, nome, dataInicio, dataFim, curso FROM Evento WHERE sigla = ?";
 
     public void insert(Evento evento) throws SQLException {
         PreparedStatement ps = null;
@@ -36,6 +36,7 @@ public class EventoDAO extends DbConnection {
             ps.execute();
         } finally {
             ps.close();
+            close(conn);
         }
     }
 
@@ -52,6 +53,7 @@ public class EventoDAO extends DbConnection {
             ps.execute();
         } finally {
             ps.close();
+            close(conn);
         }
     }
 
@@ -64,6 +66,7 @@ public class EventoDAO extends DbConnection {
             ps.execute();
         } finally {
             ps.close();
+            close(conn);
         }
     }
 
@@ -92,13 +95,15 @@ public class EventoDAO extends DbConnection {
         } finally {
             rs.close();
             ps.close();
+            close(conn);
         }
     }
 
-    public Evento find(String sigla) throws SQLException, ClassNotFoundException, ParseException, IOException {
+    public Evento find(String sigla) throws SQLException, ParseException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
+            conn=connect();
             ps = conn.prepareStatement(sqlFind);
             ps.setString(1, sigla);
             rs = ps.executeQuery();
@@ -116,6 +121,7 @@ public class EventoDAO extends DbConnection {
         } finally {
             rs.close();
             ps.close();
+            close(conn);
         }
     }
 }

@@ -73,15 +73,12 @@ public class Evento {
         this.dataInicio = dataInicio;
     }
 
-    public void setDataInicio(String dataInicio) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        format.setLenient(false);
-        this.dataInicio = (Date) format.parse(dataInicio);
-    }
-
     public void setDataInicioMySQL(String dataInicio) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        this.dataInicio = (Date) format.parse(dataInicio);
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        java.util.Date utilDate = format.parse(dataInicio);
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        this.dataInicio = sqlDate;
+        
     }
 
        public String getDataFimMySQL() {
@@ -112,14 +109,11 @@ public class Evento {
         this.dataFim = dataFim;
     }
 
-    public void setDataFim(String dataFim) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        format.setLenient(false);
-        this.dataFim = (Date) format.parse(dataFim);
-    }
-
     public void setDataFimMySQL(String dataFim) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        this.dataFim = (Date) format.parse(dataFim);
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        java.util.Date utilDate = format.parse(dataFim);
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        this.dataFim = sqlDate;
     }
 }
+
