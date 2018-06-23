@@ -20,7 +20,7 @@ public class EventoDAO extends DbConnection {
     private final String sqlInsert = "INSERT INTO Evento() VALUES (?,?,?,?,?)";
     private final String sqlUpdate = "UPDATE Evento SET nome= ?, dataInicio= ?, dataFim= ?, curso= ? WHERE sigla = ?";
     private final String sqlRemove = "DELETE FROM Evento WHERE sigla = ?";
-    private final String sqlList = "SELECT sigla, nome, dataInicio, dataFim, curso FROM Evento ORDER BY curso desc";
+    private final String sqlList = "SELECT sigla, nome, dataInicio, dataFim, curso FROM Evento ORDER BY curso";
     private final String sqlFind = "SELECT sigla, nome, dataInicio, dataFim, curso  FROM Evento WHERE sigla = ?";
 
     public void insert(Evento evento) throws SQLException {

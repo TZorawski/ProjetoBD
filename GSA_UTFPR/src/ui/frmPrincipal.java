@@ -1,5 +1,7 @@
 package ui;
 
+import dao.CursoDAO;
+import dao.EventoDAO;
 import dao.DbConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,10 +13,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import model.Curso;
+import model.Evento;
 
 /**
  *
@@ -22,29 +32,16 @@ import javax.swing.JOptionPane;
  */
 public class frmPrincipal extends javax.swing.JFrame {
 
-    public frmPrincipal() {
+    public frmPrincipal() throws SQLException {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             initComponents();
+            fillcbEvento();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-
-    
-    void combo() throws SQLException{//falta arrumar essa conexão
-        PreparedStatement ps = dao.EventoDAO.prepareStatement("SELECT sigla FROM Cursos");
-        ResultSet result = ps.executeQuery();
-        List<String> lista = new ArrayList<String>();
-        
-        while(result.next()){
-            String sigla=result.getString("sigla");
-            lista.add(sigla);
-        }
-        
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -87,6 +84,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         btnListar = new javax.swing.JButton();
         btnAddCurso = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        JTableEvento = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciamento de Fórmula 1");
@@ -129,6 +128,11 @@ public class frmPrincipal extends javax.swing.JFrame {
         });
 
         btnOrganizador.setText("ORGANIZADORES");
+        btnOrganizador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrganizadorActionPerformed(evt);
+            }
+        });
 
         btnCurso.setText("CURSOS");
         btnCurso.addActionListener(new java.awt.event.ActionListener() {
@@ -138,8 +142,18 @@ public class frmPrincipal extends javax.swing.JFrame {
         });
 
         btnFuncao.setText("FUNÇÕES");
+        btnFuncao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFuncaoActionPerformed(evt);
+            }
+        });
 
         btnCategoria.setText("CATEGORIA");
+        btnCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCategoriaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -188,7 +202,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addComponent(btnFuncao)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCategoria)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
@@ -287,7 +301,7 @@ public class frmPrincipal extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(455, Short.MAX_VALUE)
                 .addComponent(btnListar)
                 .addGap(28, 28, 28))
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -332,11 +346,42 @@ public class frmPrincipal extends javax.swing.JFrame {
             }
         });
 
+        JTableEvento.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Sigla", "Nome", "DataInicio", "DataFim", "Curso"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        JTableEvento.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(JTableEvento);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(40, 40, 40)
@@ -366,8 +411,8 @@ public class frmPrincipal extends javax.swing.JFrame {
                                 .addComponent(cbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnAddCurso)))))
-                .addContainerGap(44, Short.MAX_VALUE))
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(3, 44, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -392,6 +437,8 @@ public class frmPrincipal extends javax.swing.JFrame {
                     .addComponent(jLabel7)
                     .addComponent(cbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAddCurso))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -428,29 +475,23 @@ public class frmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInscricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInscricaoActionPerformed
-        //PilotoJDialog form = new PilotoJDialog(null, true);
-//        form.setLocationRelativeTo(null);
-//        form.setVisible(true);
+    JOptionPane.showMessageDialog(null, "Função não implementada ainda!");
     }//GEN-LAST:event_btnInscricaoActionPerformed
 
     private void btnParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnParticipanteActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, "Função não implementada ainda!");
     }//GEN-LAST:event_btnParticipanteActionPerformed
 
     private void btnMinistranteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinistranteActionPerformed
-//        PaisJDialog form = new PaisJDialog(null, true);
-//        form.setLocationRelativeTo(null);
-//        form.setVisible(true);
+    JOptionPane.showMessageDialog(null, "Função não implementada ainda!");
     }//GEN-LAST:event_btnMinistranteActionPerformed
 
     private void btnAtividadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtividadeActionPerformed
-//        EquipeJDialog form = new EquipeJDialog(null, true);
-//        form.setLocationRelativeTo(null);
-//        form.setVisible(true);
+    JOptionPane.showMessageDialog(null, "Função não implementada ainda!");
     }//GEN-LAST:event_btnAtividadeActionPerformed
 
     private void btnPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaActionPerformed
-        // TODO add your handling code here:
+    JOptionPane.showMessageDialog(null, "Função não implementada ainda!");
     }//GEN-LAST:event_btnPessoaActionPerformed
 
     private void btnAddCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCursoActionPerformed
@@ -460,54 +501,27 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddCursoActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-//        clearInputBoxes();
-//        enableButtons(true, false, false, false);
-//        enableFields(false);
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-//        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
-//
-//        if (dialogResult == JOptionPane.YES_OPTION) {
-//            try {
-//                deleteRecord();
-//                loadRecords();
-//                clearInputBoxes();
-//                enableButtons(true, false, false, false);
-//                enableFields(false);
-//            } catch (SQLException ex) {
-//                System.out.println(ex.getMessage());
-//            }
-//        }
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-//        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja salvar esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
-//
-//        if (dialogResult == JOptionPane.YES_OPTION) {
-//            try {
-//                if (addRecord == true) {
-//                    addNew();
-//                } else {
-//                    updateRecord();
-//                }
-//                addRecord = false;
-//                loadRecords();
-//
-//                enableButtons(true, false, false, false);
-//                enableFields(false);
-//            } catch (IOException | ClassNotFoundException | SQLException ex) {
-//                System.out.println(ex.getMessage());
-//            }
-//        }
+
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-       combo();
+        try {
+            loadRecords();
+        } catch (SQLException ex) {
+            Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
@@ -524,7 +538,20 @@ public class frmPrincipal extends javax.swing.JFrame {
 //
     }//GEN-LAST:event_cbCursoActionPerformed
 
+    private void btnOrganizadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrganizadorActionPerformed
+    JOptionPane.showMessageDialog(null, "Função não implementada ainda!");
+    }//GEN-LAST:event_btnOrganizadorActionPerformed
+
+    private void btnFuncaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncaoActionPerformed
+    JOptionPane.showMessageDialog(null, "Função não implementada ainda!");
+    }//GEN-LAST:event_btnFuncaoActionPerformed
+
+    private void btnCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoriaActionPerformed
+    JOptionPane.showMessageDialog(null, "Função não implementada ainda!");
+    }//GEN-LAST:event_btnCategoriaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable JTableEvento;
     private javax.swing.JButton btnAddCurso;
     private javax.swing.JButton btnAtividade;
     private javax.swing.JButton btnCadastrar;
@@ -553,6 +580,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JFormattedTextField txtFim;
     private javax.swing.JFormattedTextField txtInicio;
@@ -560,21 +588,37 @@ public class frmPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField txtSigla;
     // End of variables declaration//GEN-END:variables
 
-    private void addNew() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void addNew() throws SQLException, ParseException {
+        CursoDAO eDao = new CursoDAO(); 
+        Evento e = new Evento();
+        e.setSigla(txtSigla.getText());
+        e.setNome(txtNome.getText());
+        e.setCurso(eDao.find((String) cbCurso.getSelectedItem()));
+        e.setDataInicioMySQL(txtInicio.getText());
+        e.setDataFimMySQL(txtFim.getText());
+        EventoDAO dao = new EventoDAO();
+        dao.insert(e);
     }
 
-    private void updateRecord() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-
-    private void loadRecords() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void updateRecord() throws SQLException, ParseException {
+        CursoDAO eDao = new CursoDAO(); 
+        Evento e = new Evento();
+        e.setSigla(txtSigla.getText());
+        e.setNome(txtNome.getText());
+        e.setCurso(eDao.find((String) cbCurso.getSelectedItem()));
+        e.setDataInicioMySQL(txtInicio.getText());
+        e.setDataFimMySQL(txtFim.getText());
+        EventoDAO dao = new EventoDAO();
+        dao.update(e);
     }
 
     private void deleteRecord() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EventoDAO dao = new EventoDAO();
+        dao.remove(txtSigla.getText());
+        dao.remove(txtNome.getText());
+        dao.remove(txtInicio.getText());
+        dao.remove(txtFim.getText());
+        dao.remove((String) cbCurso.getSelectedItem());
     }
 
      public void enableButtons(boolean pesquisar, boolean cadastrar, boolean editar, boolean remover, boolean salvar, boolean cancelar){
@@ -593,10 +637,68 @@ public class frmPrincipal extends javax.swing.JFrame {
         txtInicio.setText("");
     }
 
-    private void enableFields(boolean sigla, boolean nome, boolean txtini, boolean txtf ) {
+    private void enableFields(boolean sigla, boolean nome, boolean txtini, boolean txtf, boolean curso ) {
         txtSigla.enableInputMethods(sigla);
         txtNome.enableInputMethods(nome);
         txtInicio.enableInputMethods(txtini);
         txtFim.enableInputMethods(txtf);
+        cbCurso.enableInputMethods(curso);
     }
+
+ private void fillcbEvento() throws SQLException {
+        CursoDAO dao = new CursoDAO();
+        List<Curso> cursos = dao.list();
+        cbCurso.removeAllItems();
+        for(Curso p : cursos){
+            cbCurso.addItem(p.getSigla());
+        }     
+    } 
+
+    private void loadRecords() throws SQLException {
+    String sql = "SELECT sigla as Sigla, nome as Nome, dataInicio as DataInicio, dataFim as DataFim, curso as Curso FROM Evento ORDER BY sigla;";
+        ResultSetTableModel tableModel = new ResultSetTableModel(sql);
+        JTableEvento.setModel(tableModel);
+        
+        //Adjusting columns 
+       JTableEvento.getColumnModel().getColumn(0).setWidth(200);
+        JTableEvento.getColumnModel().getColumn(0).setMinWidth(50);
+        JTableEvento.getColumnModel().getColumn(0).setMaxWidth(200);
+       
+        JTableEvento.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent event) {
+                try {
+                    if (JTableEvento.getSelectedRow() >= 0) {
+//                        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+                        
+                        Object sigla = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 0);
+                        Object nome = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 1);
+                        Object dataInicio = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 2).toString();
+                        Object dataFim = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 3).toString();
+                        Object curso = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 4);
+                        
+                        txtSigla.setText(sigla.toString());
+                        txtNome.setText(nome.toString());
+                        txtInicio.setText(dataInicio.toString());
+                        txtFim.setText(dataFim.toString());
+                        cbCurso.setSelectedItem(curso.toString());
+                        
+                        //enableButtons(false, true, true, true);
+                        txtSigla.setEnabled(true);
+                        txtNome.setEnabled(true);
+                        txtInicio.setEnabled(true);
+                        txtFim.setEnabled(true);
+                        cbCurso.setEnabled(true);
+                    }
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        });
+
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        JTableEvento.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+    }
+    
 }
