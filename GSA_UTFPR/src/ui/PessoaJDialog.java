@@ -277,7 +277,7 @@ public class PessoaJDialog extends javax.swing.JDialog {
         }
         
         //Verifica se o objeto ja esta cadastrado
-        if (pes == null) {//Nao esta
+        if (pes.getCpf() == null) {//Nao esta
             String aux = txtCPF.getText();
             clearInputBoxes();
             txtCPF.setText(aux);

@@ -17,11 +17,11 @@ import java.util.List;
 public class EventoDAO extends DbConnection {
 
     private Connection conn;
-    private final String sqlInsert = "INSERT INTO Eventos(sigla, nome, dataInicio, dataFim, curso) VALUES (?,?,?,?,?)";
-    private final String sqlUpdate = "UPDATE Eventos SET nome= ?, dataInicio= ?, dataFim= ?, curso= ? WHERE sigla = ?";
+    private final String sqlInsert = "INSERT INTO Eventos(sigla, nome, data_inicio, data_fim, cursos_sigla) VALUES (?,?,?,?,?)";
+    private final String sqlUpdate = "UPDATE Eventos SET nome= ?, data_inicio= ?, data_fim= ?, cursos_sigla= ? WHERE sigla = ?";
     private final String sqlRemove = "DELETE FROM Eventos WHERE sigla = ?";
-    private final String sqlList = "SELECT sigla, nome, dataInicio, dataFim, curso FROM Eventos ORDER BY curso";
-    private final String sqlFind = "SELECT sigla, nome, dataInicio, dataFim, curso FROM Eventos WHERE sigla = ?";
+    private final String sqlList = "SELECT sigla, nome, data_inicio, data_fim, cursos_sigla FROM Eventos ORDER BY cursos_sigla";
+    private final String sqlFind = "SELECT sigla, nome, data_inicio, data_fim, cursos_sigla FROM Eventos WHERE sigla = ?";
 
     public void insert(Evento evento) throws SQLException {
         PreparedStatement ps = null;
@@ -87,9 +87,9 @@ public class EventoDAO extends DbConnection {
                 evento = new Evento();
                 evento.setSigla(rs.getString("sigla"));
                 evento.setNome(rs.getString("nome"));
-                evento.setDataInicioMySQL(rs.getString("dataInicio"));
-                evento.setDataFimMySQL(rs.getString("dataFim"));
-                evento.setCurso(cursoDAO.find(rs.getString("curso")));
+                evento.setDataInicioMySQL(rs.getString("data_inicio"));
+                evento.setDataFimMySQL(rs.getString("data_fim"));
+                evento.setCurso(cursoDAO.find(rs.getString("sigla_cursos")));
                 list.add(evento);
             }
             return list;
@@ -114,9 +114,9 @@ public class EventoDAO extends DbConnection {
             if (rs.next()) {
                 evento.setSigla(rs.getString("sigla"));
                 evento.setNome(rs.getString("nome"));
-                evento.setDataInicioMySQL(rs.getString("dataInicio"));
-                evento.setDataFimMySQL(rs.getString("dataFim"));
-                evento.setCurso(cursoDAO.find(rs.getString("curso")));
+                evento.setDataInicioMySQL(rs.getString("data_inicio"));
+                evento.setDataFimMySQL(rs.getString("data_fim"));
+                evento.setCurso(cursoDAO.find(rs.getString("sigla_cursos")));
             }
             return evento;
         } finally {

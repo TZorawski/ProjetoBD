@@ -210,7 +210,7 @@ public class CursoJDialog extends javax.swing.JDialog {
             Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
         //Verifica se o objeto ja esta cadastrado
-        if (cur == null) {//Nao esta
+        if (cur.getSigla() == null) {//Nao esta
             enableButtons(true, true, false, false, false, false);
         }else{//Ja esta
             //universal.setSigla(cur.getSigla());
