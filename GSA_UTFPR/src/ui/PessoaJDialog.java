@@ -1,25 +1,21 @@
 package ui;
-
-import dao.EquipeDAO;
-import dao.PaisDAO;
-import dao.PilotoDAO;
+import dao.CursoDAO;
+import dao.PessoaDAO;
 import java.awt.Frame;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import model.Equipe;
-import model.Pais;
-import model.Piloto;
+import model.Curso;
+import model.Pessoa;
 
-/**
- *
- * @author André Schwerz
- */
 public class PessoaJDialog extends javax.swing.JDialog {
 
     public PessoaJDialog(java.awt.Frame parent, boolean modal) {
@@ -27,7 +23,7 @@ public class PessoaJDialog extends javax.swing.JDialog {
         initComponents();
         try {
             loadRecords();
-            fillCBPais();
+            fillCBCurso(null);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -43,7 +39,7 @@ public class PessoaJDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        JTablePilotos = new javax.swing.JTable();
+        JTablePessoa = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         txtCPF = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -58,20 +54,20 @@ public class PessoaJDialog extends javax.swing.JDialog {
         cbCurso = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         taObservacao = new javax.swing.JTextArea();
-        btnFechar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         btnPesquisar = new javax.swing.JButton();
         btnCadastrar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pessoa");
         setBounds(new java.awt.Rectangle(0, 15, 0, 0));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        JTablePilotos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        JTablePilotos.setModel(new javax.swing.table.DefaultTableModel(
+        JTablePessoa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        JTablePessoa.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -98,14 +94,14 @@ public class PessoaJDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(JTablePilotos);
-        if (JTablePilotos.getColumnModel().getColumnCount() > 0) {
-            JTablePilotos.getColumnModel().getColumn(0).setResizable(false);
-            JTablePilotos.getColumnModel().getColumn(1).setResizable(false);
-            JTablePilotos.getColumnModel().getColumn(2).setResizable(false);
-            JTablePilotos.getColumnModel().getColumn(3).setResizable(false);
-            JTablePilotos.getColumnModel().getColumn(4).setResizable(false);
-            JTablePilotos.getColumnModel().getColumn(5).setResizable(false);
+        jScrollPane1.setViewportView(JTablePessoa);
+        if (JTablePessoa.getColumnModel().getColumnCount() > 0) {
+            JTablePessoa.getColumnModel().getColumn(0).setResizable(false);
+            JTablePessoa.getColumnModel().getColumn(1).setResizable(false);
+            JTablePessoa.getColumnModel().getColumn(2).setResizable(false);
+            JTablePessoa.getColumnModel().getColumn(3).setResizable(false);
+            JTablePessoa.getColumnModel().getColumn(4).setResizable(false);
+            JTablePessoa.getColumnModel().getColumn(5).setResizable(false);
         }
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 490, 170));
@@ -114,8 +110,12 @@ public class PessoaJDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtCPF.setToolTipText("");
-        txtCPF.setEnabled(false);
         txtCPF.setName("txtCPF"); // NOI18N
+        txtCPF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCPFKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtCPF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 100, -1));
 
         jLabel1.setText("Email:");
@@ -127,6 +127,11 @@ public class PessoaJDialog extends javax.swing.JDialog {
 
         txtEmail.setEnabled(false);
         txtEmail.setName("txtEmail"); // NOI18N
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEmailKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 240, -1));
 
         jLabel3.setText("Observação:");
@@ -136,9 +141,15 @@ public class PessoaJDialog extends javax.swing.JDialog {
         jLabel4.setAlignmentX(1.0F);
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 20, 70, 20));
 
+        txtNome.setEnabled(false);
         txtNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNomeActionPerformed(evt);
+            }
+        });
+        txtNome.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNomeKeyTyped(evt);
             }
         });
         jPanel1.add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, 330, -1));
@@ -146,9 +157,15 @@ public class PessoaJDialog extends javax.swing.JDialog {
         jLabel5.setText("Registro:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 60, -1, -1));
 
+        txtRegistro.setEnabled(false);
         txtRegistro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtRegistroActionPerformed(evt);
+            }
+        });
+        txtRegistro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtRegistroKeyTyped(evt);
             }
         });
         jPanel1.add(txtRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 80, 190, -1));
@@ -157,6 +174,7 @@ public class PessoaJDialog extends javax.swing.JDialog {
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
 
         cbCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbCurso.setEnabled(false);
         cbCurso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbCursoActionPerformed(evt);
@@ -166,6 +184,12 @@ public class PessoaJDialog extends javax.swing.JDialog {
 
         taObservacao.setColumns(20);
         taObservacao.setRows(5);
+        taObservacao.setEnabled(false);
+        taObservacao.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                taObservacaoKeyTyped(evt);
+            }
+        });
         jScrollPane2.setViewportView(taObservacao);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 440, 70));
@@ -173,15 +197,16 @@ public class PessoaJDialog extends javax.swing.JDialog {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 490, 250));
         jPanel1.getAccessibleContext().setAccessibleName(" REGISTRO DE PESSOAS");
 
-        btnFechar.setText("Cancelar");
-        btnFechar.setActionCommand("btnFechar");
-        btnFechar.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnFechar.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setActionCommand("btnFechar");
+        btnCancelar.setEnabled(false);
+        btnCancelar.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFecharActionPerformed(evt);
+                btnCancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnFechar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, 90, 30));
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, 90, 30));
 
         btnPesquisar.setText("Pesquisar");
         btnPesquisar.setActionCommand("btnNovo");
@@ -215,80 +240,100 @@ public class PessoaJDialog extends javax.swing.JDialog {
         });
         getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 460, 80, 30));
 
-        btnCancelar.setText("Remover");
-        btnCancelar.setActionCommand("btnImprimir");
-        btnCancelar.setEnabled(false);
-        btnCancelar.setPreferredSize(new java.awt.Dimension(90, 29));
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btnRemover.setText("Remover");
+        btnRemover.setActionCommand("btnImprimir");
+        btnRemover.setEnabled(false);
+        btnRemover.setPreferredSize(new java.awt.Dimension(90, 29));
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
+                btnRemoverActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 460, 80, 30));
+        getContentPane().add(btnRemover, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 460, 80, 30));
 
-        jButton1.setText("Salvar");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, 80, 30));
+        btnSalvar.setText("Salvar");
+        btnSalvar.setEnabled(false);
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, 80, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        addRecord = true;
-        clearInputBoxes();
-       
-        enableButtons(false, true, true, false);
-        enableFields(true); 
+        String cpf = txtCPF.getText();
+        PessoaDAO daop = new PessoaDAO();
+        Pessoa pes = new Pessoa();
+        try {
+            pes = daop.find(cpf);
+        } catch (SQLException ex) {
+            Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //Verifica se o objeto ja esta cadastrado
+        if (pes == null) {//Nao esta
+            enableButtons(true, true, false, false, false, false);
+        }else{//Ja esta
+            txtNome.setText(pes.getNome());
+            txtEmail.setText(pes.getEmail());
+            txtRegistro.setText(pes.getRegistro());
+            taObservacao.setText(pes.getObservacao());
+            if (pes.getCurso() != null) {
+                try {
+                    fillCBCurso(pes.getCurso());
+                } catch (SQLException ex) {
+                    Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                cbCurso.setSelectedItem("null");
+            }
+            enableButtons(true, false, true, true, false, false);
+        }
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja salvar esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
-
-        if (dialogResult == JOptionPane.YES_OPTION) {
-            try {
-                if (addRecord == true) {
-                    addNew();
-                } else {
-                    updateRecord();
-                }
-                addRecord = false;
-                loadRecords();
-                
-                enableButtons(true, false, false, false);
-                enableFields(false);
-            } catch (IOException | ClassNotFoundException | SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        } 
+        addRecord = true;
+        enableFields(true, true, true, true, true, true);
+        enableButtons(false, false, false, false, true, true); 
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        addRecord = false;
+        enableFields(false, true, true, true, true, true);
+        enableButtons(false, false, false, false, true, true);
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        clearInputBoxes();
+        enableButtons(true, false, false, false, false, false);
+        enableFields(true, false, false, false, false, false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
         int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
 
         if (dialogResult == JOptionPane.YES_OPTION) {
             try {
                 deleteRecord();
-                loadRecords();
                 clearInputBoxes();
-                enableButtons(true, false, false, false);
-                enableFields(false);
+                loadRecords();
+                enableButtons(true, false, false, false, false, false);
+                enableFields(true, false, true, true, true, true);
             } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
+                Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_btnEditarActionPerformed
-
-    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnFecharActionPerformed
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        clearInputBoxes();
-        enableButtons(true, false, false, false);
-        enableFields(false);
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_txtNomeActionPerformed
 
     private void txtRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRegistroActionPerformed
@@ -298,16 +343,79 @@ public class PessoaJDialog extends javax.swing.JDialog {
     private void cbCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCursoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbCursoActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        if (addRecord == true) {
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja salvar esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
+
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                try {
+                    addNew();
+                    loadRecords();
+                    enableFields(true, false, false, false, false, false);
+                    enableButtons(true, false, true, true, false, false);
+                } catch (SQLException ex) {
+                    Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else {
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja alterar esse registro?", "Confirmação?", JOptionPane.YES_NO_OPTION);
+
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                try {
+                    updateRecord();
+                    loadRecords();
+                    enableFields(true, false, false, false, false, false);
+                    enableButtons(true, true, true, true, true, true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void txtCPFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCPFKeyTyped
+        if (txtCPF.getText().length() >= 11 ) // limit textfield to 3 characters
+            evt.consume();
+    }//GEN-LAST:event_txtCPFKeyTyped
+
+    private void txtNomeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNomeKeyTyped
+        if (txtNome.getText().length() >= 500 ) // limit textfield to 3 characters
+            evt.consume();
+    }//GEN-LAST:event_txtNomeKeyTyped
+
+    private void txtEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyTyped
+        if (txtEmail.getText().length() >= 255 ) // limit textfield to 3 characters
+            evt.consume();
+    }//GEN-LAST:event_txtEmailKeyTyped
+
+    private void txtRegistroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRegistroKeyTyped
+        if (txtRegistro.getText().length() >= 10 ) // limit textfield to 3 characters
+            evt.consume();
+    }//GEN-LAST:event_txtRegistroKeyTyped
+
+    private void taObservacaoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taObservacaoKeyTyped
+        if (taObservacao.getText().length() >= 500 ) // limit textfield to 3 characters
+            evt.consume();
+    }//GEN-LAST:event_taObservacaoKeyTyped
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable JTablePilotos;
+    private javax.swing.JTable JTablePessoa;
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnPesquisar;
+    private javax.swing.JButton btnRemover;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cbCurso;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -328,38 +436,103 @@ public class PessoaJDialog extends javax.swing.JDialog {
 
     private void clearInputBoxes() {
         txtCPF.setText("");
+        txtNome.setText("");
         txtEmail.setText("");
-        //TO-DO
+        txtRegistro.setText("");
+        taObservacao.setText("");
     }
     
     private void addNew() throws SQLException, ClassNotFoundException, IOException {
-        //TO-DO
+        Pessoa p = new Pessoa();
+        p.setCpf(txtCPF.getText());
+        p.setNome(txtNome.getText());
+        p.setEmail(txtEmail.getText());
+        p.setRegistro(txtRegistro.getText());
+        p.setObservacao(taObservacao.getText());
+        p.setCurso(null);
+        PessoaDAO daop = new PessoaDAO();
+        daop.insert(p);
     }
     
     private void updateRecord() throws SQLException, ClassNotFoundException, IOException {
-        //TO-DO
+        Pessoa p = new Pessoa();
+        p.setCpf(txtCPF.getText());
+        p.setNome(txtNome.getText());
+        p.setEmail(txtEmail.getText());
+        p.setRegistro(txtRegistro.getText());
+        p.setObservacao(taObservacao.getText());
+        p.setCurso(null);
+        PessoaDAO daop = new PessoaDAO();
+        daop.update(p);
     }
 
     private void deleteRecord() throws SQLException {
-        //TO-DO
+        PessoaDAO daop = new PessoaDAO();
+        daop.remove(txtCPF.getText());
     }
     
     private void loadRecords() throws SQLException {
-        //TO-DO
+          String sql = "SELECT cpf, nome, email, registro, observacao, cursos_sigla FROM Pessoas ORDER BY nome";
+        ResultSetTableModel tableModel = new ResultSetTableModel(sql);
+        JTablePessoa.setModel(tableModel);
+        
+        JTablePessoa.getColumnModel().getColumn(0).setWidth(50);
+        JTablePessoa.getColumnModel().getColumn(0).setMinWidth(50);
+        JTablePessoa.getColumnModel().getColumn(0).setMaxWidth(50);
+        
+        JTablePessoa.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
+            try {
+                if (JTablePessoa.getSelectedRow() >= 0) {
+                    Object s = JTablePessoa.getValueAt(JTablePessoa.getSelectedRow(), 0);
+                    Object n = JTablePessoa.getValueAt(JTablePessoa.getSelectedRow(), 1);
+
+                    txtCPF.setText(s.toString());
+                    txtNome.setText(n.toString());
+                    txtNome.setEnabled(true);
+                    enableButtons(true, true, true, true, true, true);
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        JTablePessoa.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
     }  
 
-    private void fillCBPais() throws SQLException {
-        //TO-DO
+    private void fillCBCurso(Curso cursoSelecionado) throws SQLException {
+        CursoDAO daoc = new CursoDAO();
+        ArrayList<Curso> listac = new ArrayList();
+        try {
+            listac = daoc.list();
+        } catch (SQLException ex) {
+            Logger.getLogger(PessoaJDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Curso curso;
+        for (int i = 0; i < listac.size(); i++) {
+            curso = listac.get(i);
+            cbCurso.addItem(curso.toString());
+            if (cursoSelecionado != null && cursoSelecionado.getSigla() == curso.getSigla()) {
+                cbCurso.setSelectedIndex(i);
+            }
+        }
     }
     
-    public void enableButtons(boolean novo, boolean salvar, boolean cancelar, boolean remover){
-        btnPesquisar.setEnabled(novo);
-        btnCadastrar.setEnabled(salvar);
+    public void enableButtons(boolean pesquisar, boolean cadastrar, boolean editar, boolean remover, boolean salvar, boolean cancelar){
+        btnPesquisar.setEnabled(pesquisar);
+        btnCadastrar.setEnabled(cadastrar);
+        btnEditar.setEnabled(editar);
+        btnRemover.setEnabled(remover);
+        btnSalvar.setEnabled(salvar);
         btnCancelar.setEnabled(cancelar);
-        btnEditar.setEnabled(remover);
     }
 
-    private void enableFields(boolean flag) {
-        //TO-DO
+    private void enableFields(boolean cpf, boolean nome, boolean email, boolean registro, boolean observacao, boolean curso) {
+        txtCPF.setEnabled(cpf);
+        txtNome.setEnabled(nome);
+        txtEmail.setEnabled(email);
+        txtRegistro.setEnabled(registro);
+        taObservacao.setEnabled(observacao);
+        cbCurso.setEnabled(curso);
     }
 }

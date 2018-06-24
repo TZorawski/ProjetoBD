@@ -251,19 +251,19 @@ public class EventoJDialog extends javax.swing.JDialog {
         String sigla = txtSigla.getText();
         EventoDAO dao = new EventoDAO();
         Evento evnt = new Evento();
-        try {
-            try {
-                evnt = dao.find(sigla);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(EventoJDialog.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
-                Logger.getLogger(EventoJDialog.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(EventoJDialog.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            try {
+//                evnt = dao.find(sigla);
+//            } catch (ClassNotFoundException ex) {
+//                Logger.getLogger(EventoJDialog.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (ParseException ex) {
+//                Logger.getLogger(EventoJDialog.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (IOException ex) {
+//                Logger.getLogger(EventoJDialog.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(CursoJDialog.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         //Verifica se o objeto ja esta cadastrado
         if (evnt == null) {//Nao esta
             enableButtons(true, true, false, false, false, false);

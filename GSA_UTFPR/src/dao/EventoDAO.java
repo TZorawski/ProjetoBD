@@ -17,11 +17,11 @@ import java.util.List;
 public class EventoDAO extends DbConnection {
 
     private Connection conn;
-    private final String sqlInsert = "INSERT INTO Evento(sigla, nome, dataInicio, dataFim, curso) VALUES (?,?,?,?,?)";
-    private final String sqlUpdate = "UPDATE Evento SET nome= ?, dataInicio= ?, dataFim= ?, curso= ? WHERE sigla = ?";
-    private final String sqlRemove = "DELETE FROM Evento WHERE sigla = ?";
-    private final String sqlList = "SELECT sigla, nome, dataInicio, dataFim, curso FROM Evento ORDER BY curso";
-    private final String sqlFind = "SELECT sigla, nome, dataInicio, dataFim, curso FROM Evento WHERE sigla = ?";
+    private final String sqlInsert = "INSERT INTO Eventos(sigla, nome, dataInicio, dataFim, curso) VALUES (?,?,?,?,?)";
+    private final String sqlUpdate = "UPDATE Eventos SET nome= ?, dataInicio= ?, dataFim= ?, curso= ? WHERE sigla = ?";
+    private final String sqlRemove = "DELETE FROM Eventos WHERE sigla = ?";
+    private final String sqlList = "SELECT sigla, nome, dataInicio, dataFim, curso FROM Eventos ORDER BY curso";
+    private final String sqlFind = "SELECT sigla, nome, dataInicio, dataFim, curso FROM Eventos WHERE sigla = ?";
 
     public void insert(Evento evento) throws SQLException {
         PreparedStatement ps = null;

@@ -502,7 +502,9 @@ private boolean addRecord;
     }//GEN-LAST:event_btnAtividadeActionPerformed
 
     private void btnPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPessoaActionPerformed
-    JOptionPane.showMessageDialog(null, "Função não implementada ainda!");
+        PessoaJDialog form = new PessoaJDialog(null, true);
+        form.setLocationRelativeTo(null);
+        form.setVisible(true);
     }//GEN-LAST:event_btnPessoaActionPerformed
 
     private void btnAddCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCursoActionPerformed
@@ -744,50 +746,50 @@ private boolean addRecord;
     } 
 
     private void loadRecords() throws SQLException {
-    String sql = "SELECT sigla as Sigla, nome as Nome, dataInicio as DataInicio, dataFim as DataFim, curso as Curso FROM Evento ORDER BY sigla;";
-        ResultSetTableModel tableModel = new ResultSetTableModel(sql);
-        JTableEvento.setModel(tableModel);
-        
-        //Adjusting columns 
-        JTableEvento.getColumnModel().getColumn(0).setWidth(200);
-        JTableEvento.getColumnModel().getColumn(0).setMinWidth(50);
-        JTableEvento.getColumnModel().getColumn(0).setMaxWidth(200);
-       
-        JTableEvento.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent event) {
-                try {
-                    if (JTableEvento.getSelectedRow() >= 0) {                        
-                        Object sigla = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 0);
-                        Object nome = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 1);                      
-                        String dataInicio = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 2).toString();
-                        String dataFim =  JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 3).toString();
-                        
-                        
-                        dataInicio= sqlDateToString((Date) JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 2));
-                        dataFim= sqlDateToString((Date) JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 3));                    
-                       
-                        Object curso = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 4);
-                        
-                        txtSigla.setText(sigla.toString());
-                        txtNome.setText(nome.toString());
-                        txtInicio.setText(dataInicio.toString());
-                        txtFim.setText(dataFim.toString());
-                        cbCurso.setSelectedItem(curso.toString());
-                        
-                        enableButtons(false, false, true, true, true, true);
-                        enableFields(true, true, false, false, false);
-                        
-                    }
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
-        });
-
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-        JTableEvento.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+    //String sql = "SELECT sigla as Sigla, nome as Nome, data_inicio as DataInicio, data_fim as DataFim, cursos as Curso FROM Eventos ORDER BY sigla;";
+//        ResultSetTableModel tableModel = new ResultSetTableModel(sql);
+//        JTableEvento.setModel(tableModel);
+//        
+//        //Adjusting columns 
+//        JTableEvento.getColumnModel().getColumn(0).setWidth(200);
+//        JTableEvento.getColumnModel().getColumn(0).setMinWidth(50);
+//        JTableEvento.getColumnModel().getColumn(0).setMaxWidth(200);
+//       
+//        JTableEvento.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+//            @Override
+//            public void valueChanged(ListSelectionEvent event) {
+//                try {
+//                    if (JTableEvento.getSelectedRow() >= 0) {                        
+//                        Object sigla = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 0);
+//                        Object nome = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 1);                      
+//                        String dataInicio = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 2).toString();
+//                        String dataFim =  JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 3).toString();
+//                        
+//                        
+//                        dataInicio= sqlDateToString((Date) JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 2));
+//                        dataFim= sqlDateToString((Date) JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 3));                    
+//                       
+//                        Object curso = JTableEvento.getModel().getValueAt(JTableEvento.getSelectedRow(), 4);
+//                        
+//                        txtSigla.setText(sigla.toString());
+//                        txtNome.setText(nome.toString());
+//                        txtInicio.setText(dataInicio.toString());
+//                        txtFim.setText(dataFim.toString());
+//                        cbCurso.setSelectedItem(curso.toString());
+//                        
+//                        enableButtons(false, false, true, true, true, true);
+//                        enableFields(true, true, false, false, false);
+//                        
+//                    }
+//                } catch (Exception ex) {
+//                    System.out.println(ex.getMessage());
+//                }
+//            }
+//        });
+//
+//        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+//        rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+//        JTableEvento.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
     }
     
     public static String sqlDateToString(java.sql.Date date){

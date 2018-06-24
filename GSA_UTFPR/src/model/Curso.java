@@ -9,6 +9,11 @@ public class Curso {
         return nome;
     }
 
+    @Override
+    public String toString() {
+        return sigla + "-" + nome;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
