@@ -16,7 +16,7 @@ public class PessoaDAO extends DbConnection {
 
     private Connection conn;
     private final String sqlInsert = "INSERT INTO Pessoas(cpf, nome, email, registro, observacao, cursos_sigla) VALUES (?,?,?,?,?,?)";
-    private final String sqlUpdate = "UPDATE Pessoas SET nome= ?, email= ?, registro= ?, observacao= ?, curso_sigla= ?  WHERE cpf = ?";
+    private final String sqlUpdate = "UPDATE Pessoas SET nome= ?, email= ?, registro= ?, observacao= ?, cursos_sigla= ?  WHERE cpf = ?";
     private final String sqlRemove = "DELETE FROM Pessoas WHERE cpf = ?";
     private final String sqlList = "SELECT cpf, nome, email, registro, observacao, cursos_sigla FROM Pessoas ORDER BY nome";
     private final String sqlFind = "SELECT cpf, nome, email, registro, observacao, cursos_sigla FROM Pessoas WHERE cpf = ?";

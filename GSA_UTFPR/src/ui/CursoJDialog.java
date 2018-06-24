@@ -222,7 +222,7 @@ public class CursoJDialog extends javax.swing.JDialog {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         addRecord = true;
-        enableFields(true, true);
+        enableFields(false, true);
         enableButtons(false, false, false, false, true, true);
     }//GEN-LAST:event_btnCadastrarActionPerformed
 

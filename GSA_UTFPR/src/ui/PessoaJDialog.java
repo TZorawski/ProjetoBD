@@ -25,7 +25,7 @@ public class PessoaJDialog extends javax.swing.JDialog {
             loadRecords();
             fillCBCurso(null);
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("PessoaJDialog: " + ex.getMessage());
         }
     }
 
@@ -173,7 +173,6 @@ public class PessoaJDialog extends javax.swing.JDialog {
         jLabel6.setText("Curso:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
 
-        cbCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbCurso.setEnabled(false);
         cbCurso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -279,6 +278,9 @@ public class PessoaJDialog extends javax.swing.JDialog {
         
         //Verifica se o objeto ja esta cadastrado
         if (pes == null) {//Nao esta
+            String aux = txtCPF.getText();
+            clearInputBoxes();
+            txtCPF.setText(aux);
             enableButtons(true, true, false, false, false, false);
         }else{//Ja esta
             txtNome.setText(pes.getNome());
@@ -300,7 +302,7 @@ public class PessoaJDialog extends javax.swing.JDialog {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         addRecord = true;
-        enableFields(true, true, true, true, true, true);
+        enableFields(false, true, true, true, true, true);
         enableButtons(false, false, false, false, true, true); 
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
@@ -324,6 +326,7 @@ public class PessoaJDialog extends javax.swing.JDialog {
                 deleteRecord();
                 clearInputBoxes();
                 loadRecords();
+                clearInputBoxes();
                 enableButtons(true, false, false, false, false, false);
                 enableFields(true, false, true, true, true, true);
             } catch (SQLException ex) {
@@ -449,7 +452,14 @@ public class PessoaJDialog extends javax.swing.JDialog {
         p.setEmail(txtEmail.getText());
         p.setRegistro(txtRegistro.getText());
         p.setObservacao(taObservacao.getText());
-        p.setCurso(null);
+        if (cbCurso.getSelectedItem() == null) {
+            p.setCurso(null);
+        } else {
+            CursoDAO daoc = new CursoDAO();
+            String sigla = getSiglaCurso(cbCurso.getSelectedItem().toString());
+            Curso c = daoc.find(sigla);
+            p.setCurso(c);
+        }
         PessoaDAO daop = new PessoaDAO();
         daop.insert(p);
     }
@@ -461,7 +471,14 @@ public class PessoaJDialog extends javax.swing.JDialog {
         p.setEmail(txtEmail.getText());
         p.setRegistro(txtRegistro.getText());
         p.setObservacao(taObservacao.getText());
-        p.setCurso(null);
+        if (cbCurso.getSelectedItem() == null) {
+            p.setCurso(null);
+        } else {
+            CursoDAO daoc = new CursoDAO();
+            String sigla = getSiglaCurso(cbCurso.getSelectedItem().toString());
+            Curso c = daoc.find(sigla);
+            p.setCurso(c);
+        }
         PessoaDAO daop = new PessoaDAO();
         daop.update(p);
     }
@@ -472,7 +489,7 @@ public class PessoaJDialog extends javax.swing.JDialog {
     }
     
     private void loadRecords() throws SQLException {
-          String sql = "SELECT cpf, nome, email, registro, observacao, cursos_sigla FROM Pessoas ORDER BY nome";
+        String sql = "SELECT cpf, nome, email, registro, observacao, cursos_sigla FROM Pessoas ORDER BY nome";
         ResultSetTableModel tableModel = new ResultSetTableModel(sql);
         JTablePessoa.setModel(tableModel);
         
@@ -483,24 +500,56 @@ public class PessoaJDialog extends javax.swing.JDialog {
         JTablePessoa.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
             try {
                 if (JTablePessoa.getSelectedRow() >= 0) {
-                    Object s = JTablePessoa.getValueAt(JTablePessoa.getSelectedRow(), 0);
+                    Object c = JTablePessoa.getValueAt(JTablePessoa.getSelectedRow(), 0);
                     Object n = JTablePessoa.getValueAt(JTablePessoa.getSelectedRow(), 1);
+                    Object e = JTablePessoa.getValueAt(JTablePessoa.getSelectedRow(), 2);
+                    Object r = JTablePessoa.getValueAt(JTablePessoa.getSelectedRow(), 3);
+                    Object d = JTablePessoa.getValueAt(JTablePessoa.getSelectedRow(), 4);
+                    Object cs = JTablePessoa.getValueAt(JTablePessoa.getSelectedRow(), 5);
 
-                    txtCPF.setText(s.toString());
+                    
+                    txtCPF.setText(c.toString());
                     txtNome.setText(n.toString());
-                    txtNome.setEnabled(true);
-                    enableButtons(true, true, true, true, true, true);
+                    txtEmail.setText(e.toString());
+                    txtRegistro.setText(r.toString());
+                    taObservacao.setText(d.toString());
+                    PessoaDAO daop = new PessoaDAO();
+                    Pessoa p = daop.find(c.toString());
+                    Curso curso = p.getCurso();
+                    if (curso == null) {
+                        cbCurso.setSelectedItem(null);
+                    } else {
+                        cbCurso.setSelectedItem(curso.toString());
+                        //cbCurso.setSelectedIndex(2);
+                    }
+                    enableButtons(true, false, true, true, false, false);
                 }
             } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+                System.out.println("Jtable: " + ex.getMessage());
             }
         });
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
         JTablePessoa.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
-    }  
+    }
+    
+    private String getSiglaCurso (String curso) {
+        int i = 1;
+        String sigla = "";
+        char l = curso.charAt(0);
+        while (l != '-') {
+            sigla += l;
+            l = curso.charAt(i);
+            i++;
+        }
+        sigla = sigla.trim();
+        //System.out.println("getSiglaCurso: " + sigla);
+        return sigla;
+    }
 
     private void fillCBCurso(Curso cursoSelecionado) throws SQLException {
+        cbCurso.addItem(null);
+        
         CursoDAO daoc = new CursoDAO();
         ArrayList<Curso> listac = new ArrayList();
         try {
